@@ -241,17 +241,51 @@ export default function App() {
   // Handle Language Change with AI Translation
   const handleSelectLanguage = async (lang: LanguageCode) => {
     setCurrentLang(lang);
-    if (lang === 'ms') {
-      // Reset to original Bahasa Melayu
-      setTranslatedContent({
+    
+    // Instant fallback translations
+    const dict: Record<LanguageCode, any> = {
+      ms: {
         title: "WALIMATUL URUS",
         subtitle: "Undangan Majlis Perkahwinan",
         salam: "Assalamualaikum WBT",
         invitationWording: "dengan tulus ikhlas menjemput Encik/Cik/Tuan/Puan seisi keluarga ke majlis perkahwinan putera kepada:",
         doaContent: "Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan hati Adam & Hawa, Yusof & Zulaikha dan seperti Engkau satukan hati Muhammad S.A.W & Siti Khadijah. Satukanlah hati kedua mempelai ini dengan iman, kejayaan dan tawakal. Kurniakanlah mereka zuriat yang soleh dan solehah serta berikanlah ketenangan kepada mereka di dunia dan akhirat."
-      });
-      return;
+      },
+      en: {
+        title: "THE WEDDING CELEBRATION",
+        subtitle: "Wedding Invitation",
+        salam: "Peace Be Upon You (Assalamualaikum)",
+        invitationWording: "cordially invite you and your family to celebrate the wedding union of the son of:",
+        doaContent: "O Allah, unite the hearts of the bride and groom as You united the hearts of Adam & Eve, Joseph & Zulaikha, and Prophet Muhammad PBUH & Khadijah. Bless their marriage with faith, tranquility, and pious offspring in this world and the hereafter."
+      },
+      zh: {
+        title: "婚礼盛典",
+        subtitle: "诚挚婚礼请柬",
+        salam: "愿您平安 (Assalamualaikum)",
+        invitationWording: "诚挚邀请您及家人光临参加我们新郎的婚礼：",
+        doaContent: "真主啊，请像结合亚当与夏娃、约瑟与祖莱哈、穆罕默德圣人与赫蒂彻那样，结合这对新人的心。赐予他们的婚姻信仰、安宁、幸福以及孝顺的子孙。"
+      },
+      ta: {
+        title: "திருமண அழைப்பிதழ்",
+        subtitle: "இனிய திருமண வரவேற்பு",
+        salam: "அஸ்ஸலாமு அலைக்கும் (உங்களுக்கு அமைதி உண்டாகட்டும்)",
+        invitationWording: "எங்கள் மகனின் திருமண விழாவிற்கு உங்களையும் உங்கள் குடும்பத்தினரையும் அன்போடு அழைக்கிறோம்:",
+        doaContent: "இறைவா, இந்த மணமக்களின் இதயங்களை ஆதம்-ஏவாள் மற்றும் நபிகள் நாயகம்-கதீஜா போல் இணைப்பாயாக. அவர்களின் வாழ்க்கையில் நம்பிக்கை, அமைதி மற்றும் நன்மக்களை அருள்வாயாக."
+      },
+      ar: {
+        title: "حفل الزفاف الميمون",
+        subtitle: "دعوة حفل الزفاف",
+        salam: "السلام عليكم ورحمة الله وبركاته",
+        invitationWording: "يتشرفون بدعوة سيادتكم وعائلتكم الكريمة لحضور حفل زفاف ابنهم:",
+        doaContent: "اللهم ألف بين قلبي العروسين كما ألفت بين آدم وحواء، ويوسف وزليخة، ومحمد صلى الله عليه وسلم وخديجة. اللهم ارزقهما الإيمان، والسكن، والذرية الصالحة في الدنيا والآخرة."
+      }
+    };
+
+    if (dict[lang]) {
+      setTranslatedContent(dict[lang]);
     }
+
+    if (lang === 'ms') return;
 
     setIsTranslating(true);
     try {
@@ -281,11 +315,9 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
 
       if (res.ok) {
         const data = await res.json();
-        if (data.translatedText) {
-          const lines = data.translatedText.split('\n').filter((l: string) => l.trim().length > 0);
+        if (data.translatedText && data.translatedText !== promptText) {
           setTranslatedContent((prev) => ({
             ...prev,
-            subtitle: lines[1] ? lines[1].replace(/Subtitle:\s*/i, '') : prev.subtitle,
             doaContent: data.translatedText,
           }));
         }
