@@ -1,0 +1,6 @@
+{
+  "name": "Walimatul Urus - Wedding Invitation",
+  "description": "Jemputan Majlis Perkahwinan Akim & Asyiqim dengan tema maroon floral, QR Kod Hadiah Digital, Galeri Foto, Doa Mempelai, Buku Ucapan, & Terjemahan AI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

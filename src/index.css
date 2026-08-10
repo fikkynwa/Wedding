@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .font-sans {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  .font-script {
+    font-family: 'Great Vibes', cursive;
+  }
+  .font-serif-title {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+  .font-arabic {
+    font-family: 'Amiri', serif;
+  }
+  .font-calligraffitti {
+    font-family: 'Calligraffitti', cursive;
+  }
+}
+
+@keyframes fallingParticle {
+  0% {
+    transform: translateY(-20px) translateX(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(50vh) translateX(25px) rotate(180deg);
+  }
+  100% {
+    transform: translateY(105vh) translateX(-15px) rotate(360deg);
+  }
+}
+
+.animate-falling-particle {
+  animation-name: fallingParticle;
+}
+
+/* Clean Minimalism Theme Styles */
+.bg-minimal-canvas {
+  background-color: #FCFAF7;
+}
+
+.bg-minimal-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E8E2D6;
+  box-shadow: 0 4px 24px -4px rgba(74, 69, 62, 0.06);
+}
+
+.bg-minimal-accent {
+  background-color: #F8F5F0;
+  border: 1px solid #E8E2D6;
+}
+
+.bg-minimal-dark {
+  background-color: #2D2A26;
+  color: #FCFAF7;
+}
+
+.text-minimal-title {
+  color: #2D2A26;
+}
+
+.text-minimal-body {
+  color: #4A453E;
+}
+
+.text-minimal-subtle {
+  color: #8C8478;
+}
+
+.text-minimal-gold {
+  color: #8C7A5E;
+}
+
+.border-minimal {
+  border-color: #E8E2D6;
+}
+
+.border-gold-accent {
+  border-color: #C4B49D;
+}
+
+/* Gradient text accent for minimalism */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #2D2A26 0%, #6B5B45 60%, #9A8568 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FCFAF7;
+}
+::-webkit-scrollbar-thumb {
+  background: #C4B49D;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9A8568;
+}
+
