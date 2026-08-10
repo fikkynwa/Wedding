@@ -330,11 +330,11 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
   };
 
   return (
-    <div className="min-h-screen bg-[#F2EFE9] flex justify-center items-start sm:py-4">
+    <div className="min-h-screen bg-[#2C1E16] flex justify-center items-start sm:py-4">
       {/* Mobile Phone Screen Container */}
       <div
         ref={scrollContainerRef}
-        className="w-full max-w-[430px] min-h-screen sm:min-h-[850px] sm:rounded-[32px] bg-[#FCFAF7] text-[#2D2A26] relative font-sans selection:bg-[#E8E2D6] selection:text-[#2D2A26] pb-24 shadow-2xl border border-[#E8E2D6] overflow-x-hidden"
+        className="w-full max-w-[430px] min-h-screen sm:min-h-[850px] sm:rounded-[32px] bg-[#FAF6F0] text-[#2C1A0E] relative font-sans selection:bg-[#C5A059] selection:text-white pb-24 shadow-2xl border border-[#E2D4C3] overflow-x-hidden"
       >
         {/* Falling Snow and Flower Petal Floating Overlay */}
         <SnowFloralOverlay />
@@ -364,13 +364,13 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="sticky top-16 z-30 mx-4 my-2 px-3.5 py-1.5 bg-[#2D2A26]/90 backdrop-blur-sm text-[#FCFAF7] rounded-full text-[11px] flex items-center justify-between shadow-md border border-[#E8A598]/40"
+              className="sticky top-16 z-30 mx-4 my-2 px-3.5 py-1.5 bg-[#3B2314]/95 backdrop-blur-sm text-white rounded-full text-[11px] flex items-center justify-between shadow-md border border-[#C5A059]/50"
             >
-              <span className="flex items-center gap-1.5 font-medium text-[#FDF4F5]">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span className="flex items-center gap-1.5 font-medium text-white">
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
                 Auto-Skrol Aktif
               </span>
-              <span className="text-[10px] text-[#E8A598] font-normal">
+              <span className="text-[10px] text-[#C5A059] font-normal">
                 Sentuh skrin untuk berhenti
               </span>
             </motion.div>
@@ -413,24 +413,24 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
         </main>
 
         {/* Pantun Melayu & Footer */}
-        <footer className="mt-12 py-8 px-4 border-t border-[#E8E2D6] text-center bg-[#F8F5F0]">
+        <footer className="mt-12 py-8 px-4 border-t border-[#E2D4C3] text-center bg-[#F4ECE1]">
           <div className="space-y-3">
             
-            <div className="w-9 h-9 mx-auto rounded-full bg-white border border-[#E8E2D6] flex items-center justify-center text-[#8C7A5E]">
-              <Heart className="w-4 h-4 fill-[#C4B49D]/30 text-[#8C7A5E]" />
+            <div className="w-9 h-9 mx-auto rounded-full bg-white border border-[#E2D4C3] flex items-center justify-center text-[#C5A059]">
+              <Heart className="w-4 h-4 fill-[#C5A059]/30 text-[#C5A059]" />
             </div>
 
-            <p className="font-serif-title italic text-xs text-[#4A453E] leading-relaxed px-2">
+            <p className="font-serif-title italic text-xs text-[#4A3525] leading-relaxed px-2">
               "Bunga melur suntingan jelita,<br />
               Disusun rapi di atas takhta;<br />
               Dua hati menyatu cinta,<br />
               Kekal bahagia hingga ke syurga."
             </p>
 
-            <p className="text-[11px] text-[#2D2A26] tracking-widest uppercase font-semibold">
+            <p className="text-[11px] text-[#2C1A0E] tracking-widest uppercase font-semibold">
               Walimatul Urus Akim &amp; Asyiqim • 03 Oktober 2026
             </p>
-            <p className="text-[10px] text-[#8C8478]">
+            <p className="text-[10px] text-[#7A6250]">
               Teratak Kasih Felda Trolak Selatan, Sungkai, Perak
             </p>
 

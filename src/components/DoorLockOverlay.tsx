@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Lock, Unlock, KeyRound, Sparkles } from 'lucide-react';
+import { Mail, Sparkles, Heart } from 'lucide-react';
 import { WEDDING_DETAILS } from '../data';
 
 interface DoorLockOverlayProps {
@@ -15,6 +15,16 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
   onUnlock,
 }) => {
   const [isOpening, setIsOpening] = useState(false);
+  const [recipientName, setRecipientName] = useState('Tetamu Kehormat');
+
+  useEffect(() => {
+    // Read recipient name from URL parameter e.g., ?to=Encik+Ahmad
+    const urlParams = new URLSearchParams(window.location.search);
+    const toParam = urlParams.get('to') || urlParams.get('name');
+    if (toParam) {
+      setRecipientName(toParam);
+    }
+  }, []);
 
   // Prevent background scrolling while door is locked
   useEffect(() => {
@@ -51,151 +61,126 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
           key="door-overlay"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.8, delay: 0.3 } }}
-          className="fixed inset-0 sm:max-w-[430px] sm:mx-auto z-50 overflow-hidden flex items-center justify-center bg-[#2D2A26] h-[100dvh] w-full cursor-pointer select-none"
+          className="fixed inset-0 sm:max-w-[430px] sm:mx-auto z-50 overflow-hidden flex items-center justify-center bg-[#3B2314] h-[100dvh] w-full cursor-pointer select-none"
           onClick={handleUnlockClick}
           style={{ perspective: '1200px' }}
         >
-          {/* Left Door Panel */}
+          {/* Left Panel */}
           <motion.div
             initial={{ x: 0, rotateY: 0 }}
             animate={
               isOpening
-                ? { x: '-102%', rotateY: -40, opacity: 0.9 }
+                ? { x: '-102%', rotateY: -35, opacity: 0.9 }
                 : { x: 0, rotateY: 0 }
             }
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute top-0 left-0 w-1/2 h-full bg-gradient-to-b from-[#FFFDF9] via-[#FAF3EA] to-[#FDF0EE] border-r-2 border-[#E8A598] shadow-2xl flex flex-col justify-between p-6 z-20 origin-left"
+            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute top-0 left-0 w-1/2 h-full bg-[#3B2314] border-r border-[#C5A059]/40 shadow-2xl flex flex-col justify-between p-6 z-20 origin-left"
           >
-            {/* Left Door Carvings & Decorative Framing */}
-            <div className="absolute inset-3 border border-[#E8A598]/40 pointer-events-none flex flex-col justify-between p-4">
-              <div className="w-8 h-8 border-t-2 border-l-2 border-[#D98282]"></div>
-              <div className="text-center opacity-70">
-                <p className="font-serif-title text-2xl text-[#D98282]">🌸</p>
-              </div>
-              <div className="w-8 h-8 border-b-2 border-l-2 border-[#D98282]"></div>
-            </div>
+            {/* Corner Botanical SVG Decor */}
+            <div className="absolute top-4 left-4 w-12 h-12 border-t-2 border-l-2 border-[#C5A059]/60 pointer-events-none"></div>
+            <div className="absolute bottom-4 left-4 w-12 h-12 border-b-2 border-l-2 border-[#C5A059]/60 pointer-events-none"></div>
 
-            {/* Door Header Inscription */}
-            <div className="pt-8 text-left pl-2">
-              <span className="text-[10px] tracking-[0.25em] text-[#C05621] uppercase font-bold block">
-                UNDANGAN
+            <div className="pt-8 pl-2">
+              <span className="text-[10px] tracking-[0.3em] text-[#C5A059] uppercase font-semibold block">
+                UNDANGAN MAJLIS
               </span>
-              <span className="text-xs font-serif-title text-[#2D2A26] italic font-medium">
-                Akim &amp; Asyiqim
-              </span>
-            </div>
-
-            {/* Half Arch Motif */}
-            <div className="w-full flex justify-end pr-2 opacity-30">
-              <div className="w-20 h-36 border-t-2 border-r-2 border-[#E8A598] rounded-tr-full"></div>
-            </div>
-
-            {/* Bottom Footer Motif */}
-            <div className="pb-8 pl-2">
-              <span className="text-[9px] text-[#2E5A44] font-semibold tracking-widest uppercase">
-                03 • 10 • 2026
-              </span>
-            </div>
-          </motion.div>
-
-          {/* Right Door Panel */}
-          <motion.div
-            initial={{ x: 0, rotateY: 0 }}
-            animate={
-              isOpening
-                ? { x: '102%', rotateY: 40, opacity: 0.9 }
-                : { x: 0, rotateY: 0 }
-            }
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-b from-[#FFFDF9] via-[#FAF3EA] to-[#FDF0EE] border-l-2 border-[#E8A598] shadow-2xl flex flex-col justify-between p-6 z-20 origin-right"
-          >
-            {/* Right Door Carvings & Decorative Framing */}
-            <div className="absolute inset-3 border border-[#E8E2D6] pointer-events-none flex flex-col justify-between p-4">
-              <div className="w-8 h-8 border-t-2 border-r-2 border-[#D98282] self-end"></div>
-              <div className="text-center opacity-70">
-                <p className="font-serif-title text-2xl text-[#D98282]">🌸</p>
-              </div>
-              <div className="w-8 h-8 border-b-2 border-r-2 border-[#D98282] self-end"></div>
-            </div>
-
-            {/* Door Header Inscription */}
-            <div className="pt-8 text-right pr-2">
-              <span className="text-[10px] tracking-[0.25em] text-[#C05621] uppercase font-bold block">
-                MAJLIS
-              </span>
-              <span className="text-xs font-serif-title text-[#2D2A26] italic font-medium">
+              <span className="text-xs font-serif-title text-white italic font-light">
                 Walimatul Urus
               </span>
             </div>
 
-            {/* Half Arch Motif */}
-            <div className="w-full flex justify-start pl-2 opacity-30">
-              <div className="w-20 h-36 border-t-2 border-l-2 border-[#E8A598] rounded-tl-full"></div>
+            <div className="text-center opacity-30">
+              <span className="font-arabic text-3xl text-[#C5A059]">﷽</span>
             </div>
 
-            {/* Bottom Footer Motif */}
-            <div className="pb-8 text-right pr-2">
-              <span className="text-[9px] text-[#2E5A44] font-semibold tracking-widest uppercase">
-                PERAK, MY
+            <div className="pb-8 pl-2">
+              <span className="text-[9px] text-[#CBBBAA] tracking-widest uppercase block">
+                {WEDDING_DETAILS.dateFull}
               </span>
             </div>
           </motion.div>
 
-          {/* Center Lock Badge & Interactive Trigger */}
+          {/* Right Panel */}
           <motion.div
-            animate={isOpening ? { scale: 0.8, opacity: 0 } : { scale: 1, opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            className="relative z-30 flex flex-col items-center justify-center text-center px-4"
+            initial={{ x: 0, rotateY: 0 }}
+            animate={
+              isOpening
+                ? { x: '102%', rotateY: 35, opacity: 0.9 }
+                : { x: 0, rotateY: 0 }
+            }
+            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute top-0 right-0 w-1/2 h-full bg-[#3B2314] border-l border-[#C5A059]/40 shadow-2xl flex flex-col justify-between p-6 z-20 origin-right"
           >
-            {/* Soft Glow Ambient Ring */}
-            <motion.div
-              animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.7, 0.3] }}
-              transition={{ repeat: Infinity, duration: 2.2 }}
-              className="absolute w-44 h-44 rounded-full bg-[#C4B49D]/30 blur-2xl pointer-events-none"
-            ></motion.div>
+            <div className="absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-[#C5A059]/60 pointer-events-none"></div>
+            <div className="absolute bottom-4 right-4 w-12 h-12 border-b-2 border-r-2 border-[#C5A059]/60 pointer-events-none"></div>
 
-            {/* Top Bismillah / Salutation */}
-            <div className="mb-6 space-y-1.5">
-              <p className="font-arabic text-2xl text-[#2D2A26] leading-relaxed">
-                بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
-              </p>
-              <div className="w-12 h-px bg-[#C4B49D] mx-auto my-1"></div>
-              <p className="text-[10px] uppercase tracking-[0.3em] text-[#8C7A5E] font-semibold">
-                WALIMATUL URUS
-              </p>
-              <h2 className="font-serif-title text-2xl text-[#2D2A26] font-normal">
-                {WEDDING_DETAILS.groomNameShort} &amp; {WEDDING_DETAILS.brideNameShort}
-              </h2>
+            <div className="pt-8 text-right pr-2">
+              <span className="text-[10px] tracking-[0.3em] text-[#C5A059] uppercase font-semibold block">
+                MEMPELAI
+              </span>
+              <span className="text-xs font-serif-title text-white italic font-light">
+                Akim &amp; Asyiqim
+              </span>
             </div>
 
-            {/* Lock Button Component */}
-            <button
-              onClick={handleUnlockClick}
-              className={`relative w-20 h-20 rounded-full flex flex-col items-center justify-center shadow-2xl border-2 transition-all duration-300 transform active:scale-90 hover:scale-105 ${
-                isOpening
-                  ? 'bg-[#2D2A26] text-[#FCFAF7] border-[#C4B49D]'
-                  : 'bg-white text-[#2D2A26] border-[#C4B49D] hover:border-[#2D2A26]'
-              }`}
-            >
-              {/* Decorative Ring */}
-              <div className="absolute inset-1.5 rounded-full border border-dashed border-[#C4B49D]"></div>
+            <div className="text-center opacity-30">
+              <Heart className="w-6 h-6 mx-auto text-[#C5A059]" />
+            </div>
 
-              {isOpening ? (
-                <Unlock className="w-8 h-8 text-[#C4B49D] animate-bounce" />
-              ) : (
-                <Lock className="w-8 h-8 text-[#8C7A5E]" />
-              )}
-            </button>
+            <div className="pb-8 text-right pr-2">
+              <span className="text-[9px] text-[#CBBBAA] tracking-widest uppercase block">
+                {WEDDING_DETAILS.locationName}
+              </span>
+            </div>
+          </motion.div>
 
-            {/* Instructions */}
-            <div className="mt-6 space-y-1.5 max-w-[240px]">
-              <p className="text-xs font-semibold text-[#2D2A26] tracking-wide flex items-center justify-center gap-1.5">
-                <KeyRound className="w-3.5 h-3.5 text-[#8C7A5E]" />
-                {isOpening ? 'Membuka Pintu Majlis...' : 'Tekan Kunci Untuk Membuka'}
-              </p>
-              <p className="text-[11px] text-[#8C8478] leading-tight font-medium">
-                Ketuk pintu atau tekan ikon kunci untuk membuka gerbang undangan &amp; memainkan alunan muzik.
-              </p>
+          {/* Center Envelope & Wax Seal Card */}
+          <motion.div
+            animate={isOpening ? { scale: 0.85, opacity: 0 } : { scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="relative z-30 flex flex-col items-center justify-center text-center px-6 max-w-[320px] w-full"
+          >
+            {/* Gold Arch Envelope Card Frame */}
+            <div className="w-full bg-[#2C1A0E]/95 backdrop-blur-md rounded-2xl border border-[#C5A059]/50 p-6 shadow-2xl text-center space-y-4 relative overflow-hidden">
+              <div className="absolute -top-12 -left-12 w-24 h-24 rounded-full bg-[#C5A059]/10 blur-xl pointer-events-none"></div>
+              
+              {/* Monogram Circle */}
+              <div className="w-14 h-14 mx-auto rounded-full bg-gradient-to-tr from-[#5C3A21] to-[#3B2314] border border-[#C5A059] flex items-center justify-center shadow-inner">
+                <span className="font-serif-title text-lg text-[#C5A059] font-semibold tracking-wider">
+                  H &amp; A
+                </span>
+              </div>
+
+              {/* Title */}
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.3em] text-[#C5A059] font-medium">
+                  UNDANGAN PERKAHWINAN
+                </p>
+                <h1 className="font-serif-title text-2xl text-white font-normal mt-0.5">
+                  Hakim &amp; Asyiqim
+                </h1>
+              </div>
+
+              <div className="w-12 h-px bg-[#C5A059]/40 mx-auto"></div>
+
+              {/* Recipient Name Display */}
+              <div className="bg-[#3B2314]/80 rounded-xl p-3 border border-[#C5A059]/30">
+                <p className="text-[10px] text-[#CBBBAA] uppercase tracking-wider mb-0.5">
+                  Kepada YBhg. Dato'/Datin/Tuan/Puan/Encik/Cik:
+                </p>
+                <p className="font-serif-title text-sm text-white font-medium capitalize truncate">
+                  {recipientName}
+                </p>
+              </div>
+
+              {/* Open Button (Jemputan.me Wax Seal Button Style) */}
+              <button
+                onClick={handleUnlockClick}
+                className="w-full py-3 px-6 rounded-full bg-gradient-to-r from-[#C5A059] via-[#D8B76E] to-[#A37E3A] text-[#2C1A0E] font-semibold text-xs tracking-wider uppercase shadow-lg hover:brightness-110 active:scale-95 transition-all duration-300 flex items-center justify-center gap-2"
+              >
+                <Mail className="w-4 h-4 text-[#2C1A0E]" />
+                {isOpening ? 'Membuka Undangan...' : 'Buka Undangan'}
+              </button>
             </div>
           </motion.div>
         </motion.div>
@@ -203,4 +188,5 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
     </AnimatePresence>
   );
 };
+
 

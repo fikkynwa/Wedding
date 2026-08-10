@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Calendar, Clock, MapPin, Heart, ChevronDown } from 'lucide-react';
+import { Calendar, MapPin, Heart, ChevronDown, Sparkles } from 'lucide-react';
 import { WEDDING_DETAILS } from '../data';
 
 interface InvitationCardProps {
@@ -19,95 +19,102 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({
   translatedSubtitle,
 }) => {
   return (
-    <section id="jemputan" className="relative min-h-[85vh] flex items-center justify-center py-8 px-4 overflow-hidden">
+    <section id="jemputan" className="relative min-h-[80vh] flex items-center justify-center py-6 px-4 overflow-hidden">
       
-      {/* Outer Card with Clean Minimalism Framing */}
+      {/* Outer Floral Card with Warm Brown Framing */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative w-full max-w-xl mx-auto bg-gradient-to-b from-[#FFFDF9] via-[#FAF5F0] to-[#FDF4F5] border border-[#E8A598]/40 shadow-lg p-8 sm:p-12 text-center rounded-2xl"
+        className="relative w-full max-w-xl mx-auto bg-white border border-[#E2D4C3] shadow-xl p-8 sm:p-12 text-center rounded-3xl overflow-hidden"
       >
-        {/* Colorful Corner Accent Lines */}
-        <div className="absolute top-3 left-3 w-10 h-10 border-t-2 border-l-2 border-[#D98282]"></div>
-        <div className="absolute top-3 right-3 w-10 h-10 border-t-2 border-r-2 border-[#D98282]"></div>
-        <div className="absolute bottom-3 left-3 w-10 h-10 border-b-2 border-l-2 border-[#D98282]"></div>
-        <div className="absolute bottom-3 right-3 w-10 h-10 border-b-2 border-r-2 border-[#D98282]"></div>
+        {/* Top Gold Arch Accent */}
+        <div className="absolute top-0 left-0 right-0 h-3 bg-gradient-to-r from-[#3B2314] via-[#C5A059] to-[#3B2314]"></div>
+
+        {/* Botanical Gold Corner Decor */}
+        <div className="absolute top-5 left-5 w-8 h-8 border-t-2 border-l-2 border-[#C5A059]/70 pointer-events-none"></div>
+        <div className="absolute top-5 right-5 w-8 h-8 border-t-2 border-r-2 border-[#C5A059]/70 pointer-events-none"></div>
+        <div className="absolute bottom-5 left-5 w-8 h-8 border-b-2 border-l-2 border-[#C5A059]/70 pointer-events-none"></div>
+        <div className="absolute bottom-5 right-5 w-8 h-8 border-b-2 border-r-2 border-[#C5A059]/70 pointer-events-none"></div>
 
         {/* Card Content */}
         <div className="relative z-10">
           
-          {/* Subtle Icon Badge */}
-          <div className="w-12 h-12 mx-auto mb-6 rounded-full border border-[#E8A598] flex items-center justify-center bg-[#FDF0EE] shadow-sm">
-            <Heart className="w-5 h-5 text-[#D98282] fill-[#E8A598]/40" />
+          {/* Bismillah Calligraphy Header */}
+          <div className="mb-4">
+            <span className="font-arabic text-2xl text-[#3B2314] leading-relaxed block">
+              بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+            </span>
           </div>
 
-          <p className="text-xs tracking-[0.3em] text-[#C05621] uppercase font-sans font-bold mb-2">
+          <div className="w-16 h-px bg-gradient-to-r from-transparent via-[#C5A059] to-transparent mx-auto mb-4"></div>
+
+          <p className="text-[10px] tracking-[0.3em] text-[#C5A059] uppercase font-sans font-semibold mb-1">
             {translatedTitle || "WALIMATUL URUS"}
           </p>
-          <p className="text-sm font-serif-title italic text-[#2D2A26] mb-6 font-medium">
+          <p className="text-xs font-serif-title italic text-[#5C3A21] font-medium mb-6">
             {translatedSubtitle || "Undangan Majlis Perkahwinan"}
           </p>
 
-          <div className="h-0.5 w-24 bg-gradient-to-r from-transparent via-[#E8A598] to-transparent mx-auto my-6"></div>
-
-          {/* Couple Names in Calligraffitti Typography */}
-          <div className="my-8 space-y-2">
-            <h1 className="font-calligraffitti text-4xl sm:text-6xl text-[#2D2A26] font-bold tracking-wide">
+          {/* Couple Names in Calligraphic Serif Typography */}
+          <div className="my-6 space-y-1">
+            <h1 className="font-serif-title text-4xl sm:text-5xl text-[#2C1A0E] font-semibold tracking-wide">
               {WEDDING_DETAILS.groomNameShort}
             </h1>
-            <div className="font-script text-4xl text-[#D98282] py-1">&amp;</div>
-            <h1 className="font-calligraffitti text-4xl sm:text-6xl text-[#2D2A26] font-bold tracking-wide">
+            <div className="font-script text-4xl text-[#C5A059] py-1">&amp;</div>
+            <h1 className="font-serif-title text-4xl sm:text-5xl text-[#2C1A0E] font-semibold tracking-wide">
               {WEDDING_DETAILS.brideNameShort}
             </h1>
           </div>
 
-          <div className="h-0.5 w-24 bg-gradient-to-r from-transparent via-[#E8A598] to-transparent mx-auto my-6"></div>
+          <div className="w-20 h-px bg-gradient-to-r from-transparent via-[#C5A059] to-transparent mx-auto my-6"></div>
 
-          {/* Date Banner Section matching Clean Minimalism style */}
-          <div className="max-w-xs mx-auto py-4 px-6 bg-[#F5F8F5] border border-[#7FB094]/50 rounded-xl shadow-sm my-6">
-            <p className="text-[11px] uppercase tracking-[0.25em] text-[#2E5A44] font-bold mb-2">
+          {/* Date Banner Section matching Jemputan.me Warm Brown style */}
+          <div className="max-w-xs mx-auto py-3 px-6 bg-[#F4ECE1] border border-[#E2D4C3] rounded-2xl shadow-inner my-6">
+            <p className="text-[10px] uppercase tracking-[0.25em] text-[#5C3A21] font-bold mb-1">
               {WEDDING_DETAILS.monthYear}
             </p>
             <div className="flex items-center justify-center gap-4 py-1">
-              <span className="text-xs font-semibold tracking-widest text-[#2E5A44] uppercase">
+              <span className="text-xs font-semibold tracking-widest text-[#5C3A21] uppercase">
                 {WEDDING_DETAILS.dayName}
               </span>
-              <div className="h-6 w-0.5 bg-[#7FB094]"></div>
-              <span className="font-serif-title text-3xl font-bold text-[#2D2A26] tracking-tight">
+              <div className="h-6 w-px bg-[#C5A059]"></div>
+              <span className="font-serif-title text-3xl font-bold text-[#2C1A0E] tracking-tight">
                 {WEDDING_DETAILS.dayNumber}
               </span>
-              <div className="h-6 w-0.5 bg-[#7FB094]"></div>
-              <span className="text-xs font-semibold tracking-widest text-[#2E5A44]">
+              <div className="h-6 w-px bg-[#C5A059]"></div>
+              <span className="text-xs font-semibold tracking-widest text-[#5C3A21]">
                 2026
               </span>
             </div>
           </div>
 
           {/* Quick Location Badge */}
-          <div className="mt-6 flex items-center justify-center gap-2 text-xs text-[#2D2A26] font-sans tracking-wide">
-            <MapPin className="w-3.5 h-3.5 text-[#C05621]" />
+          <div className="mt-5 flex items-center justify-center gap-2 text-xs text-[#5C3A21] font-sans tracking-wide">
+            <MapPin className="w-3.5 h-3.5 text-[#C5A059]" />
             <span className="font-medium">Felda Trolak Selatan, Sungkai, Perak</span>
           </div>
 
-          <div className="mt-8 pt-4">
+          <div className="mt-8 pt-2">
             {!isOpen && onOpenEnvelope ? (
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={onOpenEnvelope}
-                className="px-8 py-3 bg-[#D98282] text-white font-sans font-semibold text-xs tracking-[0.2em] uppercase shadow-md hover:bg-[#c66f6f] transition-all flex items-center gap-2 mx-auto rounded-full border border-[#D98282]"
+                className="px-8 py-3 bg-gradient-to-r from-[#3B2314] to-[#5C3A21] text-white font-sans font-semibold text-xs tracking-[0.2em] uppercase shadow-lg hover:brightness-110 transition-all flex items-center gap-2 mx-auto rounded-full border border-[#C5A059]"
               >
-                <Heart className="w-3.5 h-3.5 fill-white" />
+                <Heart className="w-3.5 h-3.5 fill-[#C5A059] text-[#C5A059]" />
                 Buka Kad Undangan
               </motion.button>
             ) : (
               <button
                 onClick={onScrollToDetails}
-                className="group text-[#D98282] hover:text-[#2D2A26] transition-colors flex flex-col items-center mx-auto text-xs font-medium"
+                className="group text-[#5C3A21] hover:text-[#2C1A0E] transition-colors flex flex-col items-center mx-auto text-xs font-medium"
               >
-                <span className="mb-1 font-sans font-semibold tracking-[0.15em] uppercase text-[11px]">Lihat Butiran Majlis</span>
-                <ChevronDown className="w-4 h-4 animate-bounce text-[#D98282]" />
+                <span className="mb-1 font-sans font-semibold tracking-[0.15em] uppercase text-[10px] text-[#C5A059]">
+                  Lihat Butiran Majlis
+                </span>
+                <ChevronDown className="w-4 h-4 animate-bounce text-[#5C3A21]" />
               </button>
             )}
           </div>
@@ -119,3 +126,4 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({
     </section>
   );
 };
+

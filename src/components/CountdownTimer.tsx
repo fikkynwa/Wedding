@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Calendar, Clock, Bell, Download, Check } from 'lucide-react';
+import { Calendar, Clock, Download, Check } from 'lucide-react';
 import { WEDDING_DETAILS } from '../data';
 
 export const CountdownTimer: React.FC = () => {
@@ -77,51 +77,51 @@ END:VCALENDAR`;
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
         viewport={{ once: false, amount: 0.15 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="bg-white p-6 sm:p-8 border border-[#E8A598]/40 shadow-sm rounded-2xl"
+        className="bg-white p-6 sm:p-10 border border-[#E2D4C3] shadow-xl rounded-3xl"
       >
-        <div className="flex items-center justify-center gap-1.5 text-xs uppercase tracking-wider text-[#C05621] font-bold mb-1">
-          <Clock className="w-3.5 h-3.5 text-[#C05621]" />
+        <div className="flex items-center justify-center gap-1.5 text-xs uppercase tracking-wider text-[#C5A059] font-bold mb-1">
+          <Clock className="w-3.5 h-3.5 text-[#C5A059]" />
           <span>Hitungan Detik Ke Majlis</span>
         </div>
 
-        <h3 className="font-serif-title text-lg sm:text-xl text-[#2D2A26] font-bold mb-5">
-          Mengarungi Hari Bahagia
+        <h3 className="font-serif-title text-lg sm:text-xl text-[#2C1A0E] font-semibold mb-6">
+          Menghitung Hari Bahagia
         </h3>
 
         {/* Countdown Grid */}
         <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-md mx-auto mb-6">
-          <div className="p-3 sm:p-4 bg-[#FDF0EE] border border-[#E8A598]/50 rounded-xl shadow-sm">
-            <span className="font-serif-title text-2xl sm:text-4xl font-bold text-[#D98282] block">
+          <div className="p-3 sm:p-4 bg-[#F4ECE1] border border-[#E2D4C3] rounded-2xl shadow-inner">
+            <span className="font-serif-title text-2xl sm:text-4xl font-bold text-[#2C1A0E] block">
               {timeLeft.days}
             </span>
-            <span className="text-[10px] sm:text-xs text-[#2D2A26] font-semibold uppercase tracking-wider block mt-1">
+            <span className="text-[10px] sm:text-xs text-[#5C3A21] font-semibold uppercase tracking-wider block mt-1">
               Hari
             </span>
           </div>
 
-          <div className="p-3 sm:p-4 bg-[#F5F8F5] border border-[#7FB094]/50 rounded-xl shadow-sm">
-            <span className="font-serif-title text-2xl sm:text-4xl font-bold text-[#2E5A44] block">
+          <div className="p-3 sm:p-4 bg-[#F4ECE1] border border-[#E2D4C3] rounded-2xl shadow-inner">
+            <span className="font-serif-title text-2xl sm:text-4xl font-bold text-[#2C1A0E] block">
               {timeLeft.hours.toString().padStart(2, '0')}
             </span>
-            <span className="text-[10px] sm:text-xs text-[#2D2A26] font-semibold uppercase tracking-wider block mt-1">
+            <span className="text-[10px] sm:text-xs text-[#5C3A21] font-semibold uppercase tracking-wider block mt-1">
               Jam
             </span>
           </div>
 
-          <div className="p-3 sm:p-4 bg-[#FDF6EE] border border-[#E2B887]/50 rounded-xl shadow-sm">
-            <span className="font-serif-title text-2xl sm:text-4xl font-bold text-[#C05621] block">
+          <div className="p-3 sm:p-4 bg-[#F4ECE1] border border-[#E2D4C3] rounded-2xl shadow-inner">
+            <span className="font-serif-title text-2xl sm:text-4xl font-bold text-[#2C1A0E] block">
               {timeLeft.minutes.toString().padStart(2, '0')}
             </span>
-            <span className="text-[10px] sm:text-xs text-[#2D2A26] font-semibold uppercase tracking-wider block mt-1">
+            <span className="text-[10px] sm:text-xs text-[#5C3A21] font-semibold uppercase tracking-wider block mt-1">
               Minit
             </span>
           </div>
 
-          <div className="p-3 sm:p-4 bg-[#F3F4F8] border border-[#8C7A5E]/40 rounded-xl shadow-sm">
-            <span className="font-serif-title text-2xl sm:text-4xl font-bold text-[#4A453E] block">
+          <div className="p-3 sm:p-4 bg-[#F4ECE1] border border-[#E2D4C3] rounded-2xl shadow-inner">
+            <span className="font-serif-title text-2xl sm:text-4xl font-bold text-[#2C1A0E] block">
               {timeLeft.seconds.toString().padStart(2, '0')}
             </span>
-            <span className="text-[10px] sm:text-xs text-[#2D2A26] font-semibold uppercase tracking-wider block mt-1">
+            <span className="text-[10px] sm:text-xs text-[#5C3A21] font-semibold uppercase tracking-wider block mt-1">
               Saat
             </span>
           </div>
@@ -133,15 +133,15 @@ END:VCALENDAR`;
             href={googleCalUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-4 py-2 bg.emerald-800 bg-[#2E5A44] hover:bg-[#234534] border border-[#2E5A44] text-xs font-semibold text-white flex items-center gap-1.5 transition-all shadow-md rounded-full"
+            className="px-5 py-2.5 bg-[#3B2314] hover:bg-[#2C1A0E] border border-[#C5A059] text-xs font-semibold text-white flex items-center gap-2 transition-all shadow-md rounded-full"
           >
-            <Calendar className="w-3.5 h-3.5 text-[#E8A598]" />
+            <Calendar className="w-3.5 h-3.5 text-[#C5A059]" />
             Tambah Ke Google Calendar
           </a>
 
           <button
             onClick={downloadIcs}
-            className="px-4 py-2 bg-[#FDF0EE] hover:bg-[#f8deda] border border-[#E8A598]/60 text-xs font-semibold text-[#D98282] flex items-center gap-1.5 transition-all rounded-full shadow-sm"
+            className="px-5 py-2.5 bg-[#F4ECE1] hover:bg-[#e8dad0] border border-[#E2D4C3] text-xs font-semibold text-[#2C1A0E] flex items-center gap-2 transition-all rounded-full shadow-sm"
           >
             {addedCal ? (
               <>
@@ -150,7 +150,7 @@ END:VCALENDAR`;
               </>
             ) : (
               <>
-                <Download className="w-3.5 h-3.5 text-[#D98282]" />
+                <Download className="w-3.5 h-3.5 text-[#C5A059]" />
                 Muat Turun Fail .ICS
               </>
             )}
@@ -161,3 +161,4 @@ END:VCALENDAR`;
     </section>
   );
 };
+

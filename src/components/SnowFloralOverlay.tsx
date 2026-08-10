@@ -41,15 +41,15 @@ export const SnowFloralOverlay: React.FC = () => {
         >
           {p.type === 'petal' ? (
             <div
-              className="w-full h-full bg-[#E8A598] rounded-full opacity-80"
+              className="w-full h-full bg-[#C88E68] rounded-full opacity-80"
               style={{
                 borderRadius: '80% 0 80% 0',
                 transform: 'rotate(45deg)',
-                filter: 'drop-shadow(0 1px 2px rgba(217, 130, 130, 0.4))',
+                filter: 'drop-shadow(0 1px 2px rgba(197, 160, 89, 0.4))',
               }}
             />
           ) : (
-            <div className="w-full h-full bg-white rounded-full shadow-sm opacity-90 border border-[#E8A598]/30 blur-[0.3px]" />
+            <div className="w-full h-full bg-white rounded-full shadow-sm opacity-90 border border-[#C5A059]/30 blur-[0.3px]" />
           )}
         </div>
       ))}

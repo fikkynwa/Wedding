@@ -34,71 +34,90 @@
   animation-name: fallingParticle;
 }
 
-/* Clean Minimalism Theme Styles */
-.bg-minimal-canvas {
-  background-color: #FCFAF7;
+/* Jemputan.me Modern Warm Brown & Gold Floral Luxury Theme */
+:root {
+  --bg-canvas: #FAF6F0;
+  --bg-card: #FFFFFF;
+  --color-brown-deep: #3B2314;
+  --color-brown-main: #5C3A21;
+  --color-brown-light: #F4ECE1;
+  --color-gold: #C5A059;
+  --color-gold-dark: #A37E3A;
+  --color-gold-light: #F8F3E8;
+  --color-text-dark: #2C1A0E;
+  --color-text-body: #4A3525;
+  --color-text-muted: #7A6250;
 }
 
-.bg-minimal-card {
+.bg-jemputan-canvas {
+  background-color: #FAF6F0;
+  background-image: radial-gradient(#5C3A21 0.5px, transparent 0.5px), radial-gradient(#5C3A21 0.5px, #FAF6F0 0.5px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  background-opacity: 0.03;
+}
+
+.bg-brown-card {
   background-color: #FFFFFF;
-  border: 1px solid #E8E2D6;
-  box-shadow: 0 4px 24px -4px rgba(74, 69, 62, 0.06);
+  border: 1px solid #E2D4C3;
+  box-shadow: 0 10px 30px -10px rgba(59, 35, 20, 0.08);
 }
 
-.bg-minimal-accent {
-  background-color: #F8F5F0;
-  border: 1px solid #E8E2D6;
+.bg-brown-dark {
+  background-color: #3B2314;
+  color: #FAF6F0;
 }
 
-.bg-minimal-dark {
-  background-color: #2D2A26;
-  color: #FCFAF7;
+.bg-brown-light {
+  background-color: #F4ECE1;
 }
 
-.text-minimal-title {
-  color: #2D2A26;
+.text-brown-deep {
+  color: #3B2314;
 }
 
-.text-minimal-body {
-  color: #4A453E;
+.text-brown-main {
+  color: #5C3A21;
 }
 
-.text-minimal-subtle {
-  color: #8C8478;
+.text-gold-main {
+  color: #C5A059;
 }
 
-.text-minimal-gold {
-  color: #8C7A5E;
-}
-
-.border-minimal {
-  border-color: #E8E2D6;
+.border-brown-accent {
+  border-color: #E2D4C3;
 }
 
 .border-gold-accent {
-  border-color: #C4B49D;
+  border-color: #C5A059;
 }
 
-/* Gradient text accent for minimalism */
 .text-gold-gradient {
-  background: linear-gradient(135deg, #2D2A26 0%, #6B5B45 60%, #9A8568 100%);
+  background: linear-gradient(135deg, #B89248 0%, #D8B76E 50%, #A37E3A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Scrollbar customization */
+.text-brown-gradient {
+  background: linear-gradient(135deg, #2C1A0E 0%, #5C3A21 60%, #7A4E2E 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #FCFAF7;
+  background: #FAF6F0;
 }
 ::-webkit-scrollbar-thumb {
-  background: #C4B49D;
-  border-radius: 4px;
+  background: #CBBBAA;
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #9A8568;
+  background: #5C3A21;
 }
+
 
