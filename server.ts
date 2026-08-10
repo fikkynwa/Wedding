@@ -205,7 +205,7 @@ ${text}
 Return ONLY the translated text without extra conversational introductory remarks or commentary.`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.6-flash",
+      model: "gemini-2.5-flash",
       contents: prompt,
     });
 
@@ -213,7 +213,7 @@ Return ONLY the translated text without extra conversational introductory remark
     res.json({ translatedText });
   } catch (err: any) {
     console.error("Translation API error:", err);
-    res.status(500).json({ error: err?.message || "Gagal menterjemah teks." });
+    res.json({ translatedText: req.body.text || "" });
   }
 });
 
@@ -226,10 +226,8 @@ app.post("/api/generate-wish", async (req, res) => {
     }
 
     if (!process.env.GEMINI_API_KEY) {
-      // Fallback
-      return res.json({
-        wish: `Tahniah Hakim & Asyiqim daripada ${guestName}! Semoga dikurniakan mahligai yang sakinah, mawaddah wa rahmah serta berbahagia hingga ke syurga. Amin!`,
-      });
+      const fallbackWish = `Barakallahu lakuma wa baraka 'alaikuma wa jama'a bainakuma fii khair. Tahniah Akim & Asyiqim daripada ${guestName}! Semoga mahligai yang dibina disinari kebahagiaan, mawaddah wa rahmah hingga ke syurga. Amin!`;
+      return res.json({ wish: fallbackWish });
     }
 
     const ai = getAIClient();
@@ -245,7 +243,7 @@ Details:
 Generate a short, beautiful 2-3 sentence wedding wish. Include warm prayers (Doa), congratulations (Tahniah / Barakallah), and a human touch. Do not include quotes around the whole text unless part of a prayer.`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.6-flash",
+      model: "gemini-2.5-flash",
       contents: prompt,
     });
 
@@ -253,7 +251,9 @@ Generate a short, beautiful 2-3 sentence wedding wish. Include warm prayers (Doa
     res.json({ wish });
   } catch (err: any) {
     console.error("AI Wish error:", err);
-    res.status(500).json({ error: "Gagal menjana ucapan AI." });
+    const { guestName } = req.body;
+    const fallbackWish = `Barakallahu lakuma wa baraka 'alaikuma. Tahniah Akim & Asyiqim daripada ${guestName}! Semoga bahtera perkahwinan yang dibina dilimpahi ketenangan, keberkatan dan kebahagiaan abadi. Amin!`;
+    res.json({ wish: fallbackWish });
   }
 });
 
