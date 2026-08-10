@@ -20,16 +20,42 @@ export const GuestbookAndAiWish: React.FC = () => {
       const res = await fetch('/api/wishes');
       if (res.ok) {
         const data = await res.json();
-        setWishesList(data.wishes || []);
+        if (Array.isArray(data.wishes)) {
+          // Merge with any locally stored wishes in localStorage
+          const localSaved = JSON.parse(localStorage.getItem('user_wishes') || '[]');
+          const merged = [...localSaved, ...data.wishes];
+          // Remove duplicates by id
+          const unique = Array.from(new Map(merged.map((w) => [w.id, w])).values());
+          setWishesList(unique);
+          return;
+        }
       }
     } catch (err) {
       console.error('Failed to fetch wishes:', err);
+    }
+    // Fallback to local storage if API fails
+    const localSaved = JSON.parse(localStorage.getItem('user_wishes') || '[]');
+    if (localSaved.length > 0) {
+      setWishesList(localSaved);
     }
   };
 
   useEffect(() => {
     fetchWishes();
   }, []);
+
+  // Client-side fallback AI generator
+  const generateLocalAiWish = (guestName: string, rel: string, t: string) => {
+    if (t === 'Islamik & Syahdu') {
+      return `Barakallahu lakuma wa baraka 'alaikuma wa jama'a bainakuma fii khair. Tahniah Akim & Asyiqim daripada ${guestName}! Semoga ikatan suci ini dikurniakan keikhlasan, ketenangan serta dirahmati Allah SWT hingga ke syurga. Amin YRA.`;
+    } else if (t === 'Poetik & Berkat') {
+      return `Bunga mawar harum bertaman, disiram embun pagi nan suci. Tahniah Akim & Asyiqim daripada ${guestName}! Semoga mahligai cinta yang dibina sentiasa dilimpahi keberkatan, ketenangan dan kasih sayang abadi.`;
+    } else if (t === 'Santai & Ceria') {
+      return `Tahniah Akim & Asyiqim! Daripada ${guestName}, selamat menempuh alam perkahwinan. Semoga sentiasa ceria, bertoleransi, dan sentiasa bahagia bersama selamanya!`;
+    } else {
+      return `Tahniah Akim & Asyiqim daripada ${guestName}! Selamat pengantin baru. Semoga bahtera rumah tangga yang dibina dilimpahi sakinah, mawaddah wa rahmah serta kebahagiaan berpanjangan. Amin!`;
+    }
+  };
 
   // AI Wish Generator trigger
   const handleGenerateAiWish = async () => {
@@ -55,10 +81,14 @@ export const GuestbookAndAiWish: React.FC = () => {
         const data = await res.json();
         if (data.wish) {
           setMessage(data.wish);
+          return;
         }
       }
+      // Fallback
+      setMessage(generateLocalAiWish(name.trim(), relation, tone));
     } catch (err) {
       console.error('AI Wish generation error:', err);
+      setMessage(generateLocalAiWish(name.trim(), relation, tone));
     } finally {
       setIsGeneratingAi(false);
     }
@@ -67,26 +97,43 @@ export const GuestbookAndAiWish: React.FC = () => {
   // Submit Wish
   const handleSubmitWish = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !message.trim()) return;
+    const cleanName = name.trim();
+    const cleanMsg = message.trim();
+    if (!cleanName || !cleanMsg) return;
 
     setIsSubmitting(true);
+
+    // Create new wish object
+    const newWishObj: Wish = {
+      id: 'w-' + Date.now(),
+      name: cleanName,
+      relation: relation || 'Tetamu',
+      message: cleanMsg,
+      createdAt: new Date().toISOString(),
+      likes: 1,
+    };
+
+    // Optimistically update local state immediately
+    setWishesList((prev) => [newWishObj, ...prev]);
+
+    // Save to localStorage for client-side persistence
+    const localSaved = JSON.parse(localStorage.getItem('user_wishes') || '[]');
+    localStorage.setItem('user_wishes', JSON.stringify([newWishObj, ...localSaved]));
+
+    setMessage('');
+    setSubmittedSuccess(true);
+    setTimeout(() => setSubmittedSuccess(false), 4000);
+
     try {
-      const res = await fetch('/api/wishes', {
+      await fetch('/api/wishes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: name.trim(),
+          name: cleanName,
           relation,
-          message: message.trim(),
+          message: cleanMsg,
         }),
       });
-
-      if (res.ok) {
-        setMessage('');
-        setSubmittedSuccess(true);
-        fetchWishes();
-        setTimeout(() => setSubmittedSuccess(false), 4000);
-      }
     } catch (err) {
       console.error('Submit wish error:', err);
     } finally {
@@ -96,14 +143,13 @@ export const GuestbookAndAiWish: React.FC = () => {
 
   // Like a wish
   const handleLike = async (id: string) => {
+    // Optimistic like increment
+    setWishesList((prev) =>
+      prev.map((w) => (w.id === id ? { ...w, likes: w.likes + 1 } : w))
+    );
+
     try {
-      const res = await fetch(`/api/wishes/${id}/like`, { method: 'POST' });
-      if (res.ok) {
-        const data = await res.json();
-        setWishesList((prev) =>
-          prev.map((w) => (w.id === id ? { ...w, likes: data.likes } : w))
-        );
-      }
+      await fetch(`/api/wishes/${id}/like`, { method: 'POST' });
     } catch (err) {
       console.error('Like wish error:', err);
     }
