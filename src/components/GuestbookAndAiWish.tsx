@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageSquare, Sparkles, Send, Heart, User, CheckCircle2, RefreshCw } from 'lucide-react';
-import { Wish } from '../types';
+import { Wish, LanguageCode } from '../types';
 import { db } from '../lib/firebase';
 import { collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, increment, serverTimestamp } from 'firebase/firestore';
 
-export const GuestbookAndAiWish: React.FC = () => {
+interface GuestbookAndAiWishProps {
+  currentLang?: LanguageCode;
+}
+
+export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentLang = 'ms' }) => {
   const [wishesList, setWishesList] = useState<Wish[]>([]);
   const [name, setName] = useState('');
   const [relation, setRelation] = useState('Sahabat');
   const [message, setMessage] = useState('');
   const [tone, setTone] = useState('Mesra & Hangat');
+  const [attemptCount, setAttemptCount] = useState(1);
   
   const [isGeneratingAi, setIsGeneratingAi] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedSuccess, setSubmittedSuccess] = useState(false);
+
+  const isEn = currentLang === 'en';
 
   // Subscribe to Firebase Firestore wishes collection
   useEffect(() => {
@@ -75,32 +82,43 @@ export const GuestbookAndAiWish: React.FC = () => {
       console.error('Failed to fetch wishes:', err);
     }
     const localSaved = JSON.parse(localStorage.getItem('user_wishes') || '[]');
-    if (localSaved.length > 0) {
-      setWishesList(localSaved);
-    }
+    setWishesList(localSaved);
   };
 
-  // Client-side fallback AI generator
-  const generateLocalAiWish = (guestName: string, rel: string, t: string) => {
-    if (t === 'Islamik & Syahdu') {
-      return `Barakallahu lakuma wa baraka 'alaikuma wa jama'a bainakuma fii khair. Tahniah Akim & Asyiqim daripada ${guestName}! Semoga ikatan suci ini dikurniakan keikhlasan, ketenangan serta dirahmati Allah SWT hingga ke syurga. Amin YRA.`;
-    } else if (t === 'Poetik & Berkat') {
-      return `Bunga mawar harum bertaman, disiram embun pagi nan suci. Tahniah Akim & Asyiqim daripada ${guestName}! Semoga mahligai cinta yang dibina sentiasa dilimpahi keberkatan, ketenangan dan kasih sayang abadi.`;
-    } else if (t === 'Santai & Ceria') {
-      return `Tahniah Akim & Asyiqim! Daripada ${guestName}, selamat menempuh alam perkahwinan. Semoga sentiasa ceria, bertoleransi, dan sentiasa bahagia bersama selamanya!`;
-    } else {
-      return `Tahniah Akim & Asyiqim daripada ${guestName}! Selamat pengantin baru. Semoga bahtera rumah tangga yang dibina dilimpahi sakinah, mawaddah wa rahmah serta kebahagiaan berpanjangan. Amin!`;
-    }
+  // Client-side fallback AI generator with multiple distinct template pools
+  const generateLocalAiWish = (guestName: string, rel: string, t: string, count: number) => {
+    const msPool = [
+      `Barakallahu lakuma wa baraka 'alaikuma wa jama'a bainakuma fii khair. Tahniah Akim & Asyiqim daripada ${guestName}! Semoga ikatan suci ini dikurniakan keikhlasan, ketenangan serta dirahmati Allah SWT hingga ke syurga. Amin YRA.`,
+      `Tahniah Akim & Asyiqim! Daripada ${guestName}, selamat menempuh alam perkahwinan. Semoga mahligai yang dibina sentiasa disinari cahaya kebahagiaan, kesabaran, dan persefahaman abadi.`,
+      `Bunga mawar harum bertaman, disiram embun pagi nan suci. Tahniah Akim & Asyiqim daripada ${guestName}! Semoga mahligai cinta yang dibina sentiasa dilimpahi keberkatan, ketenangan dan kasih sayang abadi.`,
+      `Setinggi-tinggi tahniah buat Akim & Asyiqim daripada ${guestName}! Semoga bahtera rumah tangga ini dilimpahi sakinah, mawaddah wa rahmah serta dikurniakan zuriat yang soleh dan solehah.`,
+      `Dengan rasa penuh kegembiraan, ${guestName} mendoakan agar perkahwinan Akim & Asyiqim senantiasa diberkati Allah SWT. Semoga kalian kekal bahagia bersama hingga ke akhir hayat!`,
+      `Selamat pengantin baru Akim & Asyiqim daripada ${guestName}! Semoga setiap detik perkahwinan kalian dihiasi dengan kegembiraan, rezeki berkadaran dan cinta yang senantiasa mekar.`
+    ];
+
+    const enPool = [
+      `Warmest congratulations to Akim & Asyiqim from ${guestName}! May Allah bless your sacred union with endless love, peace, and prosperity in this world and the hereafter. Amen!`,
+      `Wishing Akim & Asyiqim a lifetime of love and happiness! From ${guestName}, may your marriage be filled with patience, harmony, and joy always.`,
+      `Heartfelt congratulations Akim & Asyiqim! From ${guestName}, may your journey together as husband and wife be blessed with endless laughter, wisdom, and eternal togetherness.`,
+      `Congratulations on your wedding day, Akim & Asyiqim! Sent with warm wishes by ${guestName}. May your home always be filled with warmth, grace, and divine blessings.`,
+      `To Akim & Asyiqim, best wishes on this wonderful journey as you build your new life together. From ${guestName}, may your love grow stronger with each passing day!`
+    ];
+
+    const pool = isEn ? enPool : msPool;
+    return pool[(count + Math.floor(Math.random() * 3)) % pool.length];
   };
 
   // AI Wish Generator trigger
   const handleGenerateAiWish = async () => {
     if (!name.trim()) {
-      alert('Sila masukkan nama anda terlebih dahulu untuk AI menjana ucapan khusus buat anda.');
+      alert(isEn ? 'Please enter your name first for AI to generate a custom wish for you.' : 'Sila masukkan nama anda terlebih dahulu untuk AI menjana ucapan khusus buat anda.');
       return;
     }
 
+    const nextCount = attemptCount + 1;
+    setAttemptCount(nextCount);
     setIsGeneratingAi(true);
+
     try {
       const res = await fetch('/api/generate-wish', {
         method: 'POST',
@@ -109,7 +127,8 @@ export const GuestbookAndAiWish: React.FC = () => {
           guestName: name.trim(),
           relation,
           tone,
-          language: 'Bahasa Melayu',
+          language: isEn ? 'English' : 'Bahasa Melayu',
+          attemptCount: nextCount,
         }),
       });
 
@@ -121,10 +140,10 @@ export const GuestbookAndAiWish: React.FC = () => {
         }
       }
       // Fallback
-      setMessage(generateLocalAiWish(name.trim(), relation, tone));
+      setMessage(generateLocalAiWish(name.trim(), relation, tone, nextCount));
     } catch (err) {
       console.error('AI Wish generation error:', err);
-      setMessage(generateLocalAiWish(name.trim(), relation, tone));
+      setMessage(generateLocalAiWish(name.trim(), relation, tone, nextCount));
     } finally {
       setIsGeneratingAi(false);
     }
@@ -141,7 +160,7 @@ export const GuestbookAndAiWish: React.FC = () => {
 
     const wishData = {
       name: cleanName,
-      relation: relation || 'Tetamu',
+      relation: relation || (isEn ? 'Guest' : 'Tetamu'),
       message: cleanMsg,
       createdAt: serverTimestamp(),
       likes: 1,
@@ -151,7 +170,7 @@ export const GuestbookAndAiWish: React.FC = () => {
     const tempWishObj: Wish = {
       id: 'w-' + Date.now(),
       name: cleanName,
-      relation: relation || 'Tetamu',
+      relation: relation || (isEn ? 'Guest' : 'Tetamu'),
       message: cleanMsg,
       createdAt: new Date().toISOString(),
       likes: 1,
@@ -185,7 +204,6 @@ export const GuestbookAndAiWish: React.FC = () => {
 
   // Like a wish
   const handleLike = async (id: string) => {
-    // Optimistic like increment
     setWishesList((prev) =>
       prev.map((w) => (w.id === id ? { ...w, likes: w.likes + 1 } : w))
     );
@@ -210,18 +228,25 @@ export const GuestbookAndAiWish: React.FC = () => {
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
         viewport={{ once: false, amount: 0.15 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="bg-white p-6 sm:p-8 border border-[#E2D4C3] shadow-xl relative rounded-3xl"
+        className="bg-white p-6 sm:p-8 border border-[#E2D4C3] shadow-xl relative rounded-3xl overflow-hidden"
       >
+        {/* Background Flower Vectors */}
+        <svg className="absolute -top-6 -left-6 w-40 h-40 text-[#C5A059]/15 pointer-events-none" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+          <path d="M0 0 C30 10 60 30 70 70 C40 60 10 30 0 0 Z" fill="currentColor" fillOpacity="0.1" strokeWidth="1" />
+          <path d="M15 0 C35 25 50 45 85 50 C50 40 25 25 15 0 Z" fill="currentColor" fillOpacity="0.15" strokeWidth="1" />
+          <circle cx="15" cy="15" r="4" fill="currentColor" />
+        </svg>
+
         {/* Header */}
         <div className="text-center mb-6">
           <div className="inline-flex items-center justify-center p-2.5 rounded-full bg-[#F4ECE1] text-[#C5A059] mb-2 border border-[#E2D4C3]">
             <MessageSquare className="w-4 h-4" />
           </div>
           <h2 className="font-serif-title text-xl text-[#2C1A0E] uppercase tracking-wider font-bold">
-            Buku Ucapan &amp; Doa Restu
+            {isEn ? 'Guestbook & AI Blessings' : 'Buku Ucapan & Doa Restu'}
           </h2>
           <p className="text-xs text-[#5C3A21] font-medium mt-0.5">
-            Coretkan doa dan titipan harapan mesra buat pengantin
+            {isEn ? 'Leave your heartfelt prayers and blessings for the bride and groom' : 'Coretkan doa dan titipan harapan mesra buat pengantin'}
           </p>
           <div className="w-16 h-px bg-gradient-to-r from-transparent via-[#C5A059] to-transparent mx-auto my-3"></div>
         </div>
@@ -231,11 +256,11 @@ export const GuestbookAndAiWish: React.FC = () => {
           <div className="flex items-center justify-between mb-3 pb-2 border-b border-[#E2D4C3]">
             <h3 className="font-serif-title text-sm font-bold text-[#2C1A0E] flex items-center gap-1.5">
               <User className="w-3.5 h-3.5 text-[#C5A059]" />
-              Tulis Ucapan Anda
+              {isEn ? 'Write Your Message' : 'Tulis Ucapan Anda'}
             </h3>
             <span className="text-[10px] px-2.5 py-0.5 bg-white text-[#3B2314] border border-[#E2D4C3] flex items-center gap-1 font-bold rounded-full shadow-xs">
               <Sparkles className="w-3 h-3 text-[#C5A059]" />
-              Pembantu AI
+              {isEn ? 'AI Assistant' : 'Pembantu AI'}
             </span>
           </div>
 
@@ -244,12 +269,12 @@ export const GuestbookAndAiWish: React.FC = () => {
               {/* Name */}
               <div>
                 <label className="block text-[11px] text-[#2C1A0E] font-semibold mb-1">
-                  Nama Anda *
+                  {isEn ? 'Your Name *' : 'Nama Anda *'}
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="Contoh: Farhan &amp; Syaza"
+                  placeholder={isEn ? "E.g. Farhan & Syaza" : "Contoh: Farhan & Syaza"}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full px-3 py-1.5 bg-white border border-[#E2D4C3] rounded-lg text-xs text-[#2C1A0E] focus:outline-none focus:border-[#C5A059]"
@@ -259,19 +284,32 @@ export const GuestbookAndAiWish: React.FC = () => {
               {/* Relation */}
               <div>
                 <label className="block text-[11px] text-[#2C1A0E] font-semibold mb-1">
-                  Hubungan
+                  {isEn ? 'Relationship' : 'Hubungan'}
                 </label>
                 <select
                   value={relation}
                   onChange={(e) => setRelation(e.target.value)}
                   className="w-full px-3 py-1.5 bg-white border border-[#E2D4C3] rounded-lg text-xs text-[#2C1A0E] focus:outline-none focus:border-[#C5A059]"
                 >
-                  <option value="Sahabat">Sahabat Handai</option>
-                  <option value="Keluarga">Ahli Keluarga / Saudara</option>
-                  <option value="Rakan Sekerja">Rakan Sekerja / Bisnes</option>
-                  <option value="Guru">Guru / Mentor</option>
-                  <option value="Jiran">Jiran Tetangga</option>
-                  <option value="Tetamu">Tetamu Jemputan</option>
+                  {isEn ? (
+                    <>
+                      <option value="Friend">Best Friend / Friend</option>
+                      <option value="Family">Family Member / Relative</option>
+                      <option value="Colleague">Colleague / Business Partner</option>
+                      <option value="Teacher">Teacher / Mentor</option>
+                      <option value="Neighbor">Neighbor</option>
+                      <option value="Guest">Invited Guest</option>
+                    </>
+                  ) : (
+                    <>
+                      <option value="Sahabat">Sahabat Handai</option>
+                      <option value="Keluarga">Ahli Keluarga / Saudara</option>
+                      <option value="Rakan Sekerja">Rakan Sekerja / Bisnes</option>
+                      <option value="Guru">Guru / Mentor</option>
+                      <option value="Jiran">Jiran Tetangga</option>
+                      <option value="Tetamu">Tetamu Jemputan</option>
+                    </>
+                  )}
                 </select>
               </div>
             </div>
@@ -280,17 +318,17 @@ export const GuestbookAndAiWish: React.FC = () => {
             <div className="p-2.5 bg-white rounded-xl border border-[#E2D4C3] flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-1.5">
                 <span className="text-[11px] text-[#5C3A21] font-semibold">
-                  Gaya Ucapan:
+                  {isEn ? 'Wish Style:' : 'Gaya Ucapan:'}
                 </span>
                 <select
                   value={tone}
                   onChange={(e) => setTone(e.target.value)}
                   className="px-2 py-0.5 bg-[#F4ECE1] border border-[#E2D4C3] rounded text-xs text-[#2C1A0E]"
                 >
-                  <option value="Mesra & Hangat">Mesra &amp; Hangat</option>
-                  <option value="Poetik & Berkat">Poetik &amp; Berkat</option>
-                  <option value="Islamik & Syahdu">Islamik &amp; Syahdu</option>
-                  <option value="Santai & Ceria">Santai &amp; Ceria</option>
+                  <option value="Mesra & Hangat">{isEn ? 'Warm & Friendly' : 'Mesra & Hangat'}</option>
+                  <option value="Poetik & Berkat">{isEn ? 'Poetic & Blessed' : 'Poetik & Berkat'}</option>
+                  <option value="Islamik & Syahdu">{isEn ? 'Islamic & Prayerful' : 'Islamik & Syahdu'}</option>
+                  <option value="Santai & Ceria">{isEn ? 'Casual & Cheerful' : 'Santai & Ceria'}</option>
                 </select>
               </div>
 
@@ -303,12 +341,12 @@ export const GuestbookAndAiWish: React.FC = () => {
                 {isGeneratingAi ? (
                   <>
                     <RefreshCw className="w-3 h-3 animate-spin text-[#C5A059]" />
-                    Menjana...
+                    {isEn ? 'Generating...' : 'Menjana...'}
                   </>
                 ) : (
                   <>
                     <Sparkles className="w-3 h-3 text-[#C5A059]" />
-                    Jana Ucapan dengan AI
+                    {isEn ? 'Generate Wish with AI' : 'Jana Ucapan dengan AI'}
                   </>
                 )}
               </button>
@@ -317,12 +355,12 @@ export const GuestbookAndAiWish: React.FC = () => {
             {/* Message Textarea */}
             <div>
               <label className="block text-[11px] text-[#2C1A0E] font-semibold mb-1">
-                Mesej / Doa Anda *
+                {isEn ? 'Your Message / Prayer *' : 'Mesej / Doa Anda *'}
               </label>
               <textarea
                 required
                 rows={2}
-                placeholder="Tuliskan doa atau gunakan butang AI..."
+                placeholder={isEn ? "Write your wish or click the AI button to generate..." : "Tuliskan doa atau gunakan butang AI..."}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 className="w-full px-3 py-1.5 bg-white border border-[#E2D4C3] rounded-lg text-xs text-[#2C1A0E] focus:outline-none focus:border-[#C5A059] leading-relaxed"
@@ -334,11 +372,11 @@ export const GuestbookAndAiWish: React.FC = () => {
               {submittedSuccess ? (
                 <span className="text-xs text-emerald-700 font-semibold flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  Ucapan berjaya dihantar!
+                  {isEn ? 'Wish sent successfully!' : 'Ucapan berjaya dihantar!'}
                 </span>
               ) : (
                 <span className="text-[10px] text-[#7A6250]">
-                  Ucapan dipaparkan secara langsung.
+                  {isEn ? 'Wishes are displayed live below.' : 'Ucapan dipaparkan secara langsung.'}
                 </span>
               )}
 
@@ -348,7 +386,7 @@ export const GuestbookAndAiWish: React.FC = () => {
                 className="px-4 py-1.5 bg-[#5C3A21] hover:bg-[#3B2314] text-white text-xs font-bold rounded-full flex items-center gap-1.5 shadow-sm transition-all disabled:opacity-50 border border-[#C5A059]/40"
               >
                 <Send className="w-3.5 h-3.5 text-[#C5A059]" />
-                Hantar Ucapan
+                {isEn ? 'Send Wish' : 'Hantar Ucapan'}
               </button>
             </div>
           </form>
@@ -358,12 +396,12 @@ export const GuestbookAndAiWish: React.FC = () => {
         <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
           <h3 className="font-serif-title text-sm font-bold text-[#2C1A0E] mb-2 flex items-center gap-2">
             <Heart className="w-3.5 h-3.5 text-[#C5A059] fill-[#C5A059]" />
-            Titipan Doa Tetamu ({wishesList.length})
+            {isEn ? `Guest Messages (${wishesList.length})` : `Titipan Doa Tetamu (${wishesList.length})`}
           </h3>
 
           {wishesList.length === 0 ? (
-            <p className="text-xs text-center text-[#5C3A21] font-medium py-4 italic">
-              Jadilah tetamu pertama untuk memberikan ucapan!
+            <p className="text-xs text-center text-[#5C3A21] font-medium py-6 italic border border-dashed border-[#E2D4C3] rounded-2xl bg-[#FAF6F0]">
+              {isEn ? 'Be the first guest to leave a blessing for the couple!' : 'Jadilah tetamu pertama untuk memberikan ucapan!'}
             </p>
           ) : (
             wishesList.map((item) => (

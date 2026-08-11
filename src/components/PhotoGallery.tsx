@@ -2,10 +2,26 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Image as ImageIcon, Maximize2, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { GALLERY_PHOTOS } from '../data';
+import { LanguageCode } from '../types';
 
-export const PhotoGallery: React.FC = () => {
+const FALLBACK_PHOTOS: Record<string, string> = {
+  "/wedgallery1.png": "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1000&auto=format&fit=crop&q=80",
+  "/wedgallery2.png": "https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&auto=format&fit=crop&q=80",
+  "/wedgallery3.png": "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1000&auto=format&fit=crop&q=80",
+  "/wedgallery4.png": "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=1000&auto=format&fit=crop&q=80",
+  "/wedgallery5.png": "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=1000&auto=format&fit=crop&q=80",
+  "/wedgallery6.png": "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?w=1000&auto=format&fit=crop&q=80",
+};
+
+interface PhotoGalleryProps {
+  currentLang?: LanguageCode;
+}
+
+export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ currentLang = 'ms' }) => {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
+
+  const isEn = currentLang === 'en';
 
   const filteredPhotos = GALLERY_PHOTOS.filter((photo) =>
     activeCategory === 'all' ? true : photo.category === activeCategory
@@ -32,18 +48,25 @@ export const PhotoGallery: React.FC = () => {
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
         viewport={{ once: false, amount: 0.15 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="bg-white p-6 sm:p-10 border border-[#E2D4C3] shadow-xl relative rounded-3xl"
+        className="bg-white p-6 sm:p-10 border border-[#E2D4C3] shadow-xl relative rounded-3xl overflow-hidden"
       >
+        {/* Background Flower Vectors */}
+        <svg className="absolute -top-6 -right-6 w-40 h-40 text-[#C5A059]/15 pointer-events-none -scale-x-100" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+          <path d="M0 0 C30 10 60 30 70 70 C40 60 10 30 0 0 Z" fill="currentColor" fillOpacity="0.1" strokeWidth="1" />
+          <path d="M15 0 C35 25 50 45 85 50 C50 40 25 25 15 0 Z" fill="currentColor" fillOpacity="0.15" strokeWidth="1" />
+          <circle cx="15" cy="15" r="4" fill="currentColor" />
+        </svg>
+
         {/* Section Header */}
         <div className="text-center mb-6">
           <div className="inline-flex items-center justify-center p-2.5 rounded-full bg-[#F4ECE1] text-[#C5A059] mb-2 border border-[#E2D4C3]">
             <ImageIcon className="w-4 h-4" />
           </div>
           <h2 className="font-serif-title text-xl text-[#2C1A0E] uppercase tracking-wider font-semibold">
-            Galeri Kenangan
+            {isEn ? 'Photo Gallery' : 'Galeri Kenangan'}
           </h2>
           <p className="text-xs text-[#5C3A21] font-medium mt-0.5">
-            Potret indah perjalanan cinta Akim &amp; Asyiqim
+            {isEn ? "Precious moments of Aqim & Asyiqim's love story" : 'Potret indah perjalanan cinta Aqim & Asyiqim'}
           </p>
           <div className="w-16 h-px bg-gradient-to-r from-transparent via-[#C5A059] to-transparent mx-auto my-3"></div>
         </div>
@@ -51,9 +74,9 @@ export const PhotoGallery: React.FC = () => {
         {/* Filter Buttons */}
         <div className="flex justify-center items-center gap-2 mb-6">
           {[
-            { id: 'all', label: 'Semua Potret' },
+            { id: 'all', label: isEn ? 'All Photos' : 'Semua Potret' },
             { id: 'prewedding', label: 'Pre-Wedding' },
-            { id: 'moments', label: 'Momen Indah' },
+            { id: 'moments', label: isEn ? 'Lovely Moments' : 'Momen Indah' },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -87,6 +110,13 @@ export const PhotoGallery: React.FC = () => {
                   alt={photo.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    const fallback = FALLBACK_PHOTOS[photo.url] || "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1000&auto=format&fit=crop&q=80";
+                    if (target.src !== fallback) {
+                      target.src = fallback;
+                    }
+                  }}
                 />
               </div>
 
@@ -99,7 +129,7 @@ export const PhotoGallery: React.FC = () => {
                   {photo.caption}
                 </p>
                 <span className="mt-2 inline-flex items-center gap-1 text-[10px] text-[#C5A059] font-medium uppercase tracking-wider">
-                  <Maximize2 className="w-3 h-3" /> Papar Penuh
+                  <Maximize2 className="w-3 h-3" /> {isEn ? 'View Full' : 'Papar Penuh'}
                 </span>
               </div>
             </motion.div>
@@ -142,6 +172,14 @@ export const PhotoGallery: React.FC = () => {
                   src={filteredPhotos[selectedPhotoIndex].url}
                   alt={filteredPhotos[selectedPhotoIndex].title}
                   className="max-h-[70vh] w-auto object-contain border border-[#C5A059]/40 shadow-2xl rounded-2xl"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    const photoUrl = filteredPhotos[selectedPhotoIndex]?.url;
+                    const fallback = (photoUrl && FALLBACK_PHOTOS[photoUrl]) || "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1000&auto=format&fit=crop&q=80";
+                    if (target.src !== fallback) {
+                      target.src = fallback;
+                    }
+                  }}
                 />
                 <div className="mt-4 text-center">
                   <h4 className="font-serif-title text-lg font-semibold text-white">

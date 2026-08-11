@@ -13,6 +13,7 @@ import { FloatingActions } from './components/FloatingActions';
 import { DoorLockOverlay } from './components/DoorLockOverlay';
 import { SnowFloralOverlay } from './components/SnowFloralOverlay';
 import { LanguageCode } from './types';
+import { YOUTUBE_BACKGROUND_MUSIC } from './data';
 import { Heart, Sparkles, Music, Pause } from 'lucide-react';
 
 export default function App() {
@@ -344,6 +345,8 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
           isUnlocked={isUnlocked}
           onStartMusic={startAmbientMusic}
           onUnlock={handleUnlockDoor}
+          currentLang={currentLang}
+          onSelectLang={handleSelectLanguage}
         />
 
         {/* Top Header Navigation */}
@@ -356,6 +359,18 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
           onNavigate={scrollToSection}
           isTranslating={isTranslating}
         />
+
+        {/* Hidden YouTube Background Audio Player */}
+        {isPlayingMusic && (
+          <iframe
+            width="1"
+            height="1"
+            src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_BACKGROUND_MUSIC.videoId}?autoplay=1&enablejsapi=1&loop=1&playlist=${YOUTUBE_BACKGROUND_MUSIC.videoId}`}
+            title="YouTube Background Music Player"
+            allow="autoplay"
+            className="fixed -top-96 -left-96 opacity-0 pointer-events-none w-1 h-1 z-0"
+          />
+        )}
 
         {/* Active Auto-Scroll Banner Notification */}
         <AnimatePresence>
@@ -387,28 +402,29 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
             onScrollToDetails={() => scrollToSection('butiran')}
             translatedTitle={translatedContent.title}
             translatedSubtitle={translatedContent.subtitle}
+            currentLang={currentLang}
           />
 
           {/* Details & Schedule Section (Replica of Card 2) */}
-          <InvitationDetails translatedText={translatedContent} />
+          <InvitationDetails translatedText={translatedContent} currentLang={currentLang} />
 
           {/* Location & Contact Section (Replica of Card 3) */}
-          <LocationAndContact />
+          <LocationAndContact currentLang={currentLang} />
 
           {/* Doa Mempelai (Replica of Card 4) */}
           <DoaMempelai translatedText={translatedContent.doaContent} />
 
           {/* Countdown Timer */}
-          <CountdownTimer />
+          <CountdownTimer currentLang={currentLang} />
 
           {/* Digital Gift & QR Code Section */}
-          <GiftSection />
+          <GiftSection currentLang={currentLang} />
 
           {/* Photo Gallery */}
-          <PhotoGallery />
+          <PhotoGallery currentLang={currentLang} />
 
           {/* Guestbook & AI Wish Assistant */}
-          <GuestbookAndAiWish />
+          <GuestbookAndAiWish currentLang={currentLang} />
 
         </main>
 
@@ -428,7 +444,7 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
             </p>
 
             <p className="text-[11px] text-[#2C1A0E] tracking-widest uppercase font-semibold">
-              Walimatul Urus Akim &amp; Asyiqim • 03 Oktober 2026
+              Walimatul Urus Aqim &amp; Asyiqim • 03 Oktober 2026
             </p>
             <p className="text-[10px] text-[#7A6250]">
               Teratak Kasih Felda Trolak Selatan, Sungkai, Perak
@@ -440,10 +456,7 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
         {/* Floating Bottom Navigation Bar for Mobile */}
         <FloatingActions
           onNavigate={scrollToSection}
-          isPlayingMusic={isPlayingMusic}
-          onToggleMusic={toggleMusic}
-          isAutoScrolling={isAutoScrolling}
-          onToggleAutoScroll={toggleAutoScroll}
+          currentLang={currentLang}
         />
 
       </div>

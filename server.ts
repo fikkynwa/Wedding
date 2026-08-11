@@ -51,53 +51,10 @@ interface Wish {
   likes: number;
 }
 
-const rsvps: RSVP[] = [
-  {
-    id: "1",
-    name: "Ahmad Zaki & Keluarga",
-    phone: "0123456789",
-    attendance: "hadir",
-    pax: 4,
-    wishes: "Tahniah Hakim & Asyiqim! Semoga kekal hingga ke anak cucu.",
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    name: "Nurul Huda",
-    phone: "0198765432",
-    attendance: "hadir",
-    pax: 2,
-    wishes: "Selamat Pengantin Baru! Semoga mahligai yang dibina sentiasa dilimpahi keberkatan.",
-    createdAt: new Date().toISOString(),
-  },
-];
+const rsvps: RSVP[] = [];
 
-const wishes: Wish[] = [
-  {
-    id: "w1",
-    name: "Pak Cik Hassan & Mak Cik Salmah",
-    relation: "Keluarga",
-    message: "Tahniah Hakim dan Asyiqim. Semoga ikatan suci ini sentiasa dirahmati Allah SWT, dikurniakan zuriat yang soleh dan solehah, serta dilimpahi ketenangan hingga ke akhir hayat. Amin.",
-    createdAt: "2026-08-01T10:15:00Z",
-    likes: 5,
-  },
-  {
-    id: "w2",
-    name: "Khairul & Rakan-rakan USM",
-    relation: "Sahabat",
-    message: "Finally Hakim bro! Tahniah korang berdua. Semoga rumah tangga yang dibina dipenuhi cinta, kesabaran, dan kebahagiaan berpanjangan. Jumpa di Trolak!",
-    createdAt: "2026-08-03T14:30:00Z",
-    likes: 8,
-  },
-  {
-    id: "w3",
-    name: "Siti Sarah binti Idris",
-    relation: "Rakan Sekerja",
-    message: "Barakallahu lakuma wa baraka 'alaikuma wa jama'a bainakuma fii khair. Tahniah Asyiqim cantik dan suami! Semoga sentiasa berbahagia.",
-    createdAt: "2026-08-05T09:00:00Z",
-    likes: 3,
-  },
-];
+// Empty initial wishes array per user request (no pre-existing wishes)
+const wishes: Wish[] = [];
 
 // --- API ROUTES ---
 
@@ -220,18 +177,35 @@ Return ONLY the translated text without extra conversational introductory remark
 // AI Wish Generator Endpoint
 app.post("/api/generate-wish", async (req, res) => {
   try {
-    const { guestName, relation, tone, language = "Bahasa Melayu" } = req.body;
+    const { guestName, relation, tone, language = "Bahasa Melayu", attemptCount = 1 } = req.body;
     if (!guestName) {
       return res.status(400).json({ error: "Sila masukkan nama anda." });
     }
 
+    const nonce = Math.floor(Math.random() * 10000);
+
     if (!process.env.GEMINI_API_KEY) {
-      const fallbackWish = `Barakallahu lakuma wa baraka 'alaikuma wa jama'a bainakuma fii khair. Tahniah Akim & Asyiqim daripada ${guestName}! Semoga mahligai yang dibina disinari kebahagiaan, mawaddah wa rahmah hingga ke syurga. Amin!`;
+      const msVariations = [
+        `Barakallahu lakuma wa baraka 'alaikuma wa jama'a bainakuma fii khair. Tahniah Akim & Asyiqim daripada ${guestName}! Semoga ikatan suci ini dikurniakan ketenangan, kasih sayang serta keberkatan hingga ke syurga. Amin YRA!`,
+        `Tahniah Akim & Asyiqim! Daripada ${guestName}, selamat pengantin baru. Semoga mahligai perkahwinan yang dibina sentiasa disinari cahaya kebahagiaan, kesabaran, dan persefahaman abadi.`,
+        `Setinggi-tinggi tahniah buat Akim & Asyiqim daripada ${guestName}! Semoga bahtera rumah tangga ini dilimpahi sakinah, mawaddah wa rahmah serta dikurniakan zuriat yang soleh dan solehah.`,
+        `Dengan rasa penuh kegembiraan, ${guestName} mendoakan agar perkahwinan Akim & Asyiqim senantiasa diberkati Allah SWT. Semoga kalian kekal bahagia bersama hingga ke anak cucu!`,
+        `Selamat menempuh alam perkahwinan buat Akim & Asyiqim daripada ${guestName}! Semoga setiap langkah bersama sentiasa dipenuhi tawa, cinta dan rahmat-Nya.`
+      ];
+      const enVariations = [
+        `Warmest congratulations to Akim & Asyiqim from ${guestName}! May Allah bless your sacred union with endless love, peace, and prosperity in this world and the hereafter. Amen!`,
+        `Wishing Akim & Asyiqim a lifetime of love and happiness! From ${guestName}, may your marriage be filled with patience, harmony, and joy always.`,
+        `Heartfelt congratulations Akim & Asyiqim! From ${guestName}, may your journey together as husband and wife be blessed with endless laughter, wisdom, and eternal togetherness.`,
+        `Congratulations on your wedding day, Akim & Asyiqim! Sent with warm wishes by ${guestName}. May your home always be filled with warmth, grace, and divine blessings.`
+      ];
+
+      const pool = language === 'English' ? enVariations : msVariations;
+      const fallbackWish = pool[(attemptCount + nonce) % pool.length];
       return res.json({ wish: fallbackWish });
     }
 
     const ai = getAIClient();
-    const prompt = `Act as an AI Assistant writing a heartfelt, warm, and culturally rich wedding blessing/wish (Ucapan Perkahwinan & Doa Mempelai) for a Malay wedding invitation.
+    const prompt = `Act as an AI Assistant writing a unique, heartfelt, and culturally rich wedding blessing/wish (Ucapan Perkahwinan & Doa Mempelai) for a wedding invitation.
 
 Details:
 - Couple: Muhammad Hakim Bin Mohd Khairi & Najma Asyiqim Binti Muhaizi (Akim & Asyiqim)
@@ -239,8 +213,11 @@ Details:
 - Relation to couple: ${relation || "Kawan / Tetamu"}
 - Tone desired: ${tone || "Mesra, Hangat, Islamik & Penuh Keberkatan"}
 - Output Language: ${language}
+- Attempt Number: ${attemptCount} (Variation Seed: ${nonce})
 
-Generate a short, beautiful 2-3 sentence wedding wish. Include warm prayers (Doa), congratulations (Tahniah / Barakallah), and a human touch. Do not include quotes around the whole text unless part of a prayer.`;
+CRITICAL INSTRUCTION:
+Generate a completely NEW, UNIQUE, and DISTINCT 2-3 sentence wedding wish.
+Do NOT repeat sentence structures, idioms, or phrasing from previous generations. Make the vocabulary fresh, personal, and poetic each time so that clicking "generate" repeatedly gives different wording every single time. Do not wrap in quotes.`;
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
@@ -251,8 +228,11 @@ Generate a short, beautiful 2-3 sentence wedding wish. Include warm prayers (Doa
     res.json({ wish });
   } catch (err: any) {
     console.error("AI Wish error:", err);
-    const { guestName } = req.body;
-    const fallbackWish = `Barakallahu lakuma wa baraka 'alaikuma. Tahniah Akim & Asyiqim daripada ${guestName}! Semoga bahtera perkahwinan yang dibina dilimpahi ketenangan, keberkatan dan kebahagiaan abadi. Amin!`;
+    const { guestName, language } = req.body;
+    const isEn = language === 'English';
+    const fallbackWish = isEn
+      ? `Warmest congratulations Akim & Asyiqim from ${guestName}! May your marriage be filled with peace, love, and divine grace.`
+      : `Barakallahu lakuma wa baraka 'alaikuma. Tahniah Akim & Asyiqim daripada ${guestName}! Semoga bahtera perkahwinan yang dibina dilimpahi ketenangan, keberkatan dan kebahagiaan abadi. Amin!`;
     res.json({ wish: fallbackWish });
   }
 });

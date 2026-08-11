@@ -19,7 +19,23 @@ export const DoaMempelai: React.FC<DoaMempelaiProps> = ({ translatedText }) => {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="bg-white p-6 sm:p-10 border border-[#E2D4C3] shadow-xl text-center relative overflow-hidden rounded-3xl"
       >
-        
+        {/* Background Flower Vectors */}
+        <svg className="absolute -top-6 -left-6 w-44 h-44 text-[#C5A059]/15 pointer-events-none" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+          <path d="M0 0 C30 10 60 30 70 70 C40 60 10 30 0 0 Z" fill="currentColor" fillOpacity="0.1" strokeWidth="1" />
+          <path d="M15 0 C35 25 50 45 85 50 C50 40 25 25 15 0 Z" fill="currentColor" fillOpacity="0.15" strokeWidth="1" />
+          <circle cx="15" cy="15" r="4" fill="currentColor" />
+          <circle cx="35" cy="22" r="2.5" fill="currentColor" />
+          <circle cx="22" cy="35" r="2.5" fill="currentColor" />
+        </svg>
+
+        <svg className="absolute -bottom-6 -right-6 w-44 h-44 text-[#C5A059]/15 pointer-events-none rotate-180" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+          <path d="M0 0 C30 10 60 30 70 70 C40 60 10 30 0 0 Z" fill="currentColor" fillOpacity="0.1" strokeWidth="1" />
+          <path d="M15 0 C35 25 50 45 85 50 C50 40 25 25 15 0 Z" fill="currentColor" fillOpacity="0.15" strokeWidth="1" />
+          <circle cx="15" cy="15" r="4" fill="currentColor" />
+          <circle cx="35" cy="22" r="2.5" fill="currentColor" />
+          <circle cx="22" cy="35" r="2.5" fill="currentColor" />
+        </svg>
+
         {/* Calligraphic Bismillah Header */}
         <div className="mb-4">
           <p className="font-arabic text-2xl sm:text-3xl text-[#3B2314] py-1 leading-relaxed">

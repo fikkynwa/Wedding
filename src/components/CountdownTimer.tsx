@@ -2,8 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Calendar, Clock, Download, Check } from 'lucide-react';
 import { WEDDING_DETAILS } from '../data';
+import { LanguageCode } from '../types';
 
-export const CountdownTimer: React.FC = () => {
+interface CountdownTimerProps {
+  currentLang?: LanguageCode;
+}
+
+export const CountdownTimer: React.FC<CountdownTimerProps> = ({ currentLang = 'ms' }) => {
+  const isEn = currentLang === 'en';
   const targetDate = new Date("2026-10-03T11:00:00+08:00").getTime();
 
   const [timeLeft, setTimeLeft] = useState({
@@ -77,15 +83,22 @@ END:VCALENDAR`;
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
         viewport={{ once: false, amount: 0.15 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="bg-white p-6 sm:p-10 border border-[#E2D4C3] shadow-xl rounded-3xl"
+        className="bg-white p-6 sm:p-10 border border-[#E2D4C3] shadow-xl rounded-3xl relative overflow-hidden"
       >
+        {/* Background Flower Vectors */}
+        <svg className="absolute -top-4 -right-4 w-36 h-36 text-[#C5A059]/15 pointer-events-none -scale-x-100" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+          <path d="M0 0 C30 10 60 30 70 70 C40 60 10 30 0 0 Z" fill="currentColor" fillOpacity="0.1" strokeWidth="1" />
+          <path d="M15 0 C35 25 50 45 85 50 C50 40 25 25 15 0 Z" fill="currentColor" fillOpacity="0.15" strokeWidth="1" />
+          <circle cx="15" cy="15" r="4" fill="currentColor" />
+        </svg>
+
         <div className="flex items-center justify-center gap-1.5 text-xs uppercase tracking-wider text-[#C5A059] font-bold mb-1">
           <Clock className="w-3.5 h-3.5 text-[#C5A059]" />
-          <span>Hitungan Detik Ke Majlis</span>
+          <span>{isEn ? 'Countdown to the Ceremony' : 'Hitungan Detik Ke Majlis'}</span>
         </div>
 
         <h3 className="font-serif-title text-lg sm:text-xl text-[#2C1A0E] font-semibold mb-6">
-          Menghitung Hari Bahagia
+          {isEn ? 'Counting Down to Our Blessed Day' : 'Menghitung Hari Bahagia'}
         </h3>
 
         {/* Countdown Grid */}
@@ -95,7 +108,7 @@ END:VCALENDAR`;
               {timeLeft.days}
             </span>
             <span className="text-[10px] sm:text-xs text-[#5C3A21] font-semibold uppercase tracking-wider block mt-1">
-              Hari
+              {isEn ? 'Days' : 'Hari'}
             </span>
           </div>
 
@@ -104,7 +117,7 @@ END:VCALENDAR`;
               {timeLeft.hours.toString().padStart(2, '0')}
             </span>
             <span className="text-[10px] sm:text-xs text-[#5C3A21] font-semibold uppercase tracking-wider block mt-1">
-              Jam
+              {isEn ? 'Hours' : 'Jam'}
             </span>
           </div>
 
@@ -113,7 +126,7 @@ END:VCALENDAR`;
               {timeLeft.minutes.toString().padStart(2, '0')}
             </span>
             <span className="text-[10px] sm:text-xs text-[#5C3A21] font-semibold uppercase tracking-wider block mt-1">
-              Minit
+              {isEn ? 'Mins' : 'Minit'}
             </span>
           </div>
 
@@ -122,7 +135,7 @@ END:VCALENDAR`;
               {timeLeft.seconds.toString().padStart(2, '0')}
             </span>
             <span className="text-[10px] sm:text-xs text-[#5C3A21] font-semibold uppercase tracking-wider block mt-1">
-              Saat
+              {isEn ? 'Secs' : 'Saat'}
             </span>
           </div>
         </div>
@@ -136,7 +149,7 @@ END:VCALENDAR`;
             className="px-5 py-2.5 bg-[#3B2314] hover:bg-[#2C1A0E] border border-[#C5A059] text-xs font-semibold text-white flex items-center gap-2 transition-all shadow-md rounded-full"
           >
             <Calendar className="w-3.5 h-3.5 text-[#C5A059]" />
-            Tambah Ke Google Calendar
+            {isEn ? 'Add to Google Calendar' : 'Tambah Ke Google Calendar'}
           </a>
 
           <button
@@ -146,12 +159,12 @@ END:VCALENDAR`;
             {addedCal ? (
               <>
                 <Check className="w-3.5 h-3.5 text-emerald-600" />
-                Kalendar Disimpan!
+                {isEn ? 'Calendar Saved!' : 'Kalendar Disimpan!'}
               </>
             ) : (
               <>
                 <Download className="w-3.5 h-3.5 text-[#C5A059]" />
-                Muat Turun Fail .ICS
+                {isEn ? 'Download .ICS File' : 'Muat Turun Fail .ICS'}
               </>
             )}
           </button>

@@ -10,14 +10,12 @@ interface HeaderNavProps {
   activeSection: string;
   onNavigate: (sectionId: string) => void;
   isTranslating: boolean;
+  youtubeUrl?: string;
 }
 
 const LANGUAGES: LanguageOption[] = [
   { code: 'ms', name: 'Bahasa Melayu', flag: '🇲🇾' },
   { code: 'en', name: 'English', flag: '🇬🇧' },
-  { code: 'zh', name: '中文 (Chinese)', flag: '🇨🇳' },
-  { code: 'ta', name: 'தமிழ் (Tamil)', flag: '🇮🇳' },
-  { code: 'ar', name: 'العربية (Arabic)', flag: '🇸🇦' },
 ];
 
 export const HeaderNav: React.FC<HeaderNavProps> = ({
@@ -28,6 +26,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
   activeSection,
   onNavigate,
   isTranslating,
+  youtubeUrl = 'https://www.youtube.com/watch?v=2vjPBrBU-TM',
 }) => {
   const [langOpen, setLangOpen] = useState(false);
 
@@ -42,12 +41,12 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           onClick={() => onNavigate('jemputan')}
           className="flex items-center gap-2.5 group text-left focus:outline-none"
         >
-          <div className="w-8 h-8 rounded-full bg-[#2C1A0E] border border-[#C5A059]/60 flex items-center justify-center text-[#C5A059] group-hover:scale-105 transition-transform">
-            <Heart className="w-3.5 h-3.5 fill-[#C5A059]/30 text-[#C5A059]" />
+          <div className="w-8 h-8 rounded-full bg-[#2C1A0E] border border-[#C5A059] flex items-center justify-center text-[#C5A059] font-serif-title text-xs font-bold tracking-wider shadow-inner group-hover:scale-105 transition-transform">
+            A&amp;A
           </div>
           <div>
             <span className="font-serif-title text-base font-semibold text-white leading-none block">
-              Akim &amp; Asyiqim
+              Aqim &amp; Asyiqim
             </span>
             <span className="text-[9px] tracking-[0.2em] text-[#C5A059] uppercase font-sans">
               03 Oktober 2026
@@ -61,7 +60,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           {/* Music Toggle */}
           <button
             onClick={onToggleMusic}
-            title={isPlayingMusic ? "Matikan Muzik" : "Mainkan Muzik Ambient"}
+            title={isPlayingMusic ? "Matikan Muzik" : "Mainkan Muzik"}
             className={`p-2 rounded-full border transition-all flex items-center justify-center ${
               isPlayingMusic
                 ? 'bg-[#C5A059] text-[#2C1A0E] border-[#C5A059]'
