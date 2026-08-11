@@ -20,7 +20,6 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
   onSelectLang,
 }) => {
   const [isOpening, setIsOpening] = useState(false);
-  const [countdownNumber, setCountdownNumber] = useState<number | null>(null);
   const [recipientName, setRecipientName] = useState('Tetamu Kehormat');
 
   // Interactive Likes & Restu State
@@ -107,31 +106,18 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
 
   const handleUnlockClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (countdownNumber !== null || isOpening || isUnlocked) return;
+    if (isOpening || isUnlocked) return;
 
     // 1. Immediately start audio in user gesture call stack
     onStartMusic();
 
-    // 2. Start countdown sequence 3, 2, 1
-    setCountdownNumber(3);
+    // 2. Trigger door opening animation
+    setIsOpening(true);
 
+    // 3. Complete unlock in parent state after door opens
     setTimeout(() => {
-      setCountdownNumber(2);
-    }, 850);
-
-    setTimeout(() => {
-      setCountdownNumber(1);
-    }, 1700);
-
-    setTimeout(() => {
-      setCountdownNumber(null);
-      setIsOpening(true);
-
-      // Complete unlock in parent state after door opens
-      setTimeout(() => {
-        onUnlock();
-      }, 1100);
-    }, 2550);
+      onUnlock();
+    }, 1100);
   };
 
   // Multi-language text for initial screen
@@ -287,40 +273,6 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
             {/* Gold Arch Envelope Card Frame */}
             <div className="w-full bg-[#2C1A0E]/95 backdrop-blur-md rounded-2xl border border-[#C5A059]/50 p-6 shadow-2xl text-center space-y-3.5 relative overflow-hidden">
               <div className="absolute -top-12 -left-12 w-24 h-24 rounded-full bg-[#C5A059]/10 blur-xl pointer-events-none"></div>
-
-              {/* Countdown Overlay when Unlocking */}
-              <AnimatePresence>
-                {countdownNumber !== null && (
-                  <motion.div
-                    key="countdown-overlay"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 1.1 }}
-                    className="absolute inset-0 z-40 bg-[#1A0E07]/95 backdrop-blur-md rounded-2xl flex flex-col items-center justify-center p-6 border border-[#C5A059]"
-                  >
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={countdownNumber}
-                        initial={{ scale: 0.4, opacity: 0, y: 10 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 1.6, opacity: 0, y: -10 }}
-                        transition={{ type: 'spring', stiffness: 350, damping: 22 }}
-                        className="relative flex items-center justify-center"
-                      >
-                        <div className="w-20 h-20 rounded-full border-2 border-[#C5A059] bg-gradient-to-tr from-[#3B2314] via-[#2C1A0E] to-[#1A0E07] flex items-center justify-center shadow-[0_0_25px_rgba(197,160,89,0.6)]">
-                          <span className="font-serif-title text-4xl font-bold text-[#E8D09E] drop-shadow-md">
-                            {countdownNumber}
-                          </span>
-                        </div>
-                        <div className="absolute -inset-2 rounded-full border border-[#C5A059]/40 animate-ping pointer-events-none"></div>
-                      </motion.div>
-                    </AnimatePresence>
-                    <p className="mt-4 text-[11px] tracking-[0.2em] text-[#C5A059] uppercase font-semibold font-serif-title animate-pulse">
-                      {currentTexts.openingBtn}
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
 
               {/* Decorative Flower Vector Accents inside Envelope */}
               <svg className="absolute -top-3 -right-3 w-20 h-20 text-[#C5A059]/30 pointer-events-none" viewBox="0 0 100 100" fill="none" stroke="currentColor">

@@ -36,114 +36,17 @@ export default function App() {
     doaContent: "Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan hati Adam & Hawa, Yusof & Zulaikha dan seperti Engkau satukan hati Muhammad S.A.W & Siti Khadijah. Satukanlah hati kedua mempelai ini dengan iman, kejayaan dan tawakal. Kurniakanlah mereka zuriat yang soleh dan solehah serta berikanlah ketenangan kepada mereka di dunia dan akhirat."
   });
 
-  // Synthesized Romantic Wedding Acoustic Piano & String Pad Engine
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const isAudioActiveRef = useRef(false);
-
+  // YouTube Background Music Controls
   const startAmbientMusic = () => {
-    if (isAudioActiveRef.current && audioContextRef.current?.state === 'running') return;
-    try {
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-      if (!AudioContextClass) return;
-
-      if (!audioContextRef.current || audioContextRef.current.state === 'closed') {
-        audioContextRef.current = new AudioContextClass();
-      }
-
-      const ctx = audioContextRef.current;
-      if (ctx.state === 'suspended') {
-        ctx.resume();
-      }
-
-      isAudioActiveRef.current = true;
-      setIsPlayingMusic(true);
-
-      // Romantic Canon / Wedding Piano Major Arpeggios (C, G, Am, Em, F, C, F, G)
-      const chordProgressions = [
-        [261.63, 329.63, 392.00, 523.25], // C Major (C4, E4, G4, C5)
-        [196.00, 246.94, 293.66, 392.00], // G Major (G3, B3, D4, G4)
-        [220.00, 261.63, 329.63, 440.00], // A Minor (A3, C4, E4, A4)
-        [164.81, 196.00, 246.94, 329.63], // E Minor (E3, G3, B3, E4)
-        [174.61, 220.00, 261.63, 349.23], // F Major (F3, A3, C4, F4)
-        [261.63, 329.63, 392.00, 523.25], // C Major
-        [174.61, 220.00, 261.63, 349.23], // F Major
-        [196.00, 246.94, 293.66, 392.00], // G Major
-      ];
-
-      let chordIdx = 0;
-      let noteIdx = 0;
-
-      const playPianoNote = () => {
-        if (!isAudioActiveRef.current || !audioContextRef.current) return;
-        const now = ctx.currentTime;
-
-        const currentChord = chordProgressions[chordIdx % chordProgressions.length];
-        const freq = currentChord[noteIdx % currentChord.length];
-
-        // Piano Fundamental Oscillator
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        // Overtone harmonic for rich acoustic warmth
-        const overtoneOsc = ctx.createOscillator();
-        const overtoneGain = ctx.createGain();
-
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, now);
-
-        overtoneOsc.type = 'sine';
-        overtoneOsc.frequency.setValueAtTime(freq * 2, now);
-
-        // Romantic Piano Envelope (Warm attack, smooth decay)
-        gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(0.06, now + 0.08);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 3.0);
-
-        overtoneGain.gain.setValueAtTime(0, now);
-        overtoneGain.gain.linearRampToValueAtTime(0.015, now + 0.08);
-        overtoneGain.gain.exponentialRampToValueAtTime(0.0001, now + 2.0);
-
-        osc.connect(gain);
-        overtoneOsc.connect(overtoneGain);
-
-        gain.connect(ctx.destination);
-        overtoneGain.connect(ctx.destination);
-
-        osc.start(now);
-        overtoneOsc.start(now);
-
-        osc.stop(now + 3.2);
-        overtoneOsc.stop(now + 2.2);
-
-        noteIdx++;
-        if (noteIdx % currentChord.length === 0) {
-          chordIdx++;
-        }
-
-        setTimeout(playPianoNote, 420);
-      };
-
-      playPianoNote();
-    } catch (e) {
-      console.warn("Audio Context setup prevented by browser autoplay policy:", e);
-    }
+    setIsPlayingMusic(true);
   };
 
   const stopAmbientMusic = () => {
-    if (audioContextRef.current) {
-      audioContextRef.current.close();
-      audioContextRef.current = null;
-    }
-    isAudioActiveRef.current = false;
     setIsPlayingMusic(false);
   };
 
   const toggleMusic = () => {
-    if (isPlayingMusic) {
-      stopAmbientMusic();
-    } else {
-      startAmbientMusic();
-    }
+    setIsPlayingMusic((prev) => !prev);
   };
 
   // Door Unlock Handler
@@ -365,7 +268,7 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
           <iframe
             width="1"
             height="1"
-            src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_BACKGROUND_MUSIC.videoId}?autoplay=1&enablejsapi=1&loop=1&playlist=${YOUTUBE_BACKGROUND_MUSIC.videoId}`}
+            src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_BACKGROUND_MUSIC.videoId}?autoplay=1&start=10&enablejsapi=1&loop=1&playlist=${YOUTUBE_BACKGROUND_MUSIC.videoId}`}
             title="YouTube Background Music Player"
             allow="autoplay"
             className="fixed -top-96 -left-96 opacity-0 pointer-events-none w-1 h-1 z-0"

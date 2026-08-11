@@ -16,6 +16,9 @@
   .font-calligraffitti {
     font-family: 'Calligraffitti', cursive;
   }
+  .font-calistoga {
+    font-family: 'Calistoga', serif;
+  }
 }
 
 @keyframes fallingParticle {

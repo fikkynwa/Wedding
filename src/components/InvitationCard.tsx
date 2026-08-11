@@ -79,13 +79,13 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({
 
           {/* Couple Names - Separated on New Lines with Clear & Symbol */}
           <div className="my-6 space-y-1">
-            <h1 className="font-serif-title text-4xl sm:text-5xl text-[#2C1A0E] font-semibold tracking-wide">
+            <h1 className="font-calistoga text-4xl sm:text-5xl text-[#2C1A0E] font-semibold tracking-wide">
               {WEDDING_DETAILS.groomNameShort}
             </h1>
             <div className="font-serif-title italic font-normal text-3xl sm:text-4xl text-[#C5A059] py-1">
               &amp;
             </div>
-            <h1 className="font-serif-title text-4xl sm:text-5xl text-[#2C1A0E] font-semibold tracking-wide">
+            <h1 className="font-calistoga text-4xl sm:text-5xl text-[#2C1A0E] font-semibold tracking-wide">
               {WEDDING_DETAILS.brideNameShort}
             </h1>
           </div>
@@ -98,7 +98,7 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({
               {WEDDING_DETAILS.monthYear}
             </p>
             <div className="flex items-center justify-center gap-4 py-1">
-              <span className="text-xs font-serif-title font-bold tracking-widest text-[#5C3A21] uppercase">
+              <span className="text-sm font-serif-title font-bold tracking-widest text-[#5C3A21] uppercase">
                 {WEDDING_DETAILS.dayName}
               </span>
               <div className="h-6 w-px bg-[#C5A059]"></div>
@@ -106,7 +106,7 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({
                 {WEDDING_DETAILS.dayNumber}
               </span>
               <div className="h-6 w-px bg-[#C5A059]"></div>
-              <span className="text-xs font-serif-title font-bold tracking-widest text-[#5C3A21]">
+              <span className="text-sm font-serif-title font-bold tracking-widest text-[#5C3A21]">
                 2026
               </span>
             </div>
