@@ -28,8 +28,8 @@ export const WEDDING_DETAILS = {
 };
 
 export const YOUTUBE_BACKGROUND_MUSIC = {
-  url: "https://www.youtube.com/watch?v=52K-UgfHDU8&list=RD52K-UgfHDU8&start_radio=1",
-  videoId: "52K-UgfHDU8",
+  url: "https://www.youtube.com/watch?v=MTOM2ooYGCQ&list=RDMTOM2ooYGCQ&start_radio=1",
+  videoId: "MTOM2ooYGCQ",
   title: "Lagu Latar Perkahwinan (YouTube Instrumental)",
 };
 
