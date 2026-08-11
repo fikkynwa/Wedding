@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Volume2, VolumeX, Globe, Heart, Sparkles } from 'lucide-react';
 import { LanguageCode, LanguageOption } from '../types';
+import { WEDDING_DETAILS } from '../data';
 
 interface HeaderNavProps {
   currentLang: LanguageCode;
@@ -46,7 +47,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
           </div>
           <div>
             <span className="font-serif-title text-base font-semibold text-white leading-none block">
-              Aqim &amp; Asyiqim
+              {WEDDING_DETAILS.groomNameShort} &amp; {WEDDING_DETAILS.brideNameShort}
             </span>
             <span className="text-[9px] tracking-[0.2em] text-[#C5A059] uppercase font-sans">
               03 Oktober 2026

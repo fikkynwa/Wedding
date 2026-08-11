@@ -7,13 +7,12 @@ import { LocationAndContact } from './components/LocationAndContact';
 import { DoaMempelai } from './components/DoaMempelai';
 import { CountdownTimer } from './components/CountdownTimer';
 import { GiftSection } from './components/GiftSection';
-import { PhotoGallery } from './components/PhotoGallery';
 import { GuestbookAndAiWish } from './components/GuestbookAndAiWish';
 import { FloatingActions } from './components/FloatingActions';
 import { DoorLockOverlay } from './components/DoorLockOverlay';
 import { SnowFloralOverlay } from './components/SnowFloralOverlay';
 import { LanguageCode } from './types';
-import { YOUTUBE_BACKGROUND_MUSIC } from './data';
+import { YOUTUBE_BACKGROUND_MUSIC, WEDDING_DETAILS } from './data';
 import { Heart, Sparkles, Music, Pause } from 'lucide-react';
 
 export default function App() {
@@ -265,7 +264,7 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
           <iframe
             width="1"
             height="1"
-            src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_BACKGROUND_MUSIC.videoId}?autoplay=1&start=4&enablejsapi=1&loop=1&playlist=${YOUTUBE_BACKGROUND_MUSIC.videoId}`}
+            src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_BACKGROUND_MUSIC.videoId}?autoplay=1&start=202&enablejsapi=1&loop=1&playlist=${YOUTUBE_BACKGROUND_MUSIC.videoId}`}
             title="YouTube Background Music Player"
             allow="autoplay"
             className="fixed -top-96 -left-96 opacity-0 pointer-events-none w-1 h-1 z-0"
@@ -320,9 +319,6 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
           {/* Digital Gift & QR Code Section */}
           <GiftSection currentLang={currentLang} />
 
-          {/* Photo Gallery */}
-          <PhotoGallery currentLang={currentLang} />
-
           {/* Guestbook & AI Wish Assistant */}
           <GuestbookAndAiWish currentLang={currentLang} />
 
@@ -338,13 +334,13 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
 
             <p className="font-serif-title italic text-xs text-[#4A3525] leading-relaxed px-2">
               "Bunga melur suntingan jelita,<br />
-              Disusun rapi di atas takhta;<br />
+              Disusun rapi di atas takhta,<br />
               Dua hati menyatu cinta,<br />
               Kekal bahagia hingga ke syurga."
             </p>
 
             <p className="text-[11px] text-[#2C1A0E] tracking-widest uppercase font-semibold">
-              Walimatul Urus Aqim &amp; Asyiqim • 03 Oktober 2026
+              Walimatul Urus {WEDDING_DETAILS.groomNameShort} &amp; {WEDDING_DETAILS.brideNameShort} • 03 Oktober 2026
             </p>
             <p className="text-[10px] text-[#7A6250]">
               Teratak Kasih Felda Trolak Selatan, Sungkai, Perak

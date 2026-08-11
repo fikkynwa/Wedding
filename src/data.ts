@@ -1,7 +1,7 @@
 import { ContactPerson, GiftAccount, PhotoItem, ScheduleEvent } from './types';
 
 export const WEDDING_DETAILS = {
-  groomNameShort: "Aqim",
+  groomNameShort: "Akim",
   brideNameShort: "Asyiqim",
   groomFullName: "Muhammad Hakim Bin Mohd Khairi",
   brideFullName: "Najma Asyiqim Binti Muhaizi",
@@ -19,7 +19,7 @@ export const WEDDING_DETAILS = {
   googleMapsUrl: "https://maps.google.com/?q=No.+300+Jalan+Timur,+Felda+Trolak+Selatan,+35600+Sungkai,+Perak",
   wazeUrl: "https://waze.com/ul?q=Felda+Trolak+Selatan+Sungkai+Perak",
   calendarEvent: {
-    title: "Majlis Perkahwinan Aqim & Asyiqim",
+    title: "Majlis Perkahwinan Akim & Asyiqim",
     details: "Walimatul Urus Muhammad Hakim & Najma Asyiqim di Felda Trolak Selatan, Sungkai, Perak.",
     location: "No. 300 Jalan Timur, Felda Trolak Selatan, 35600 Sungkai, Perak",
     startDate: "20261003T030000Z", // UTC for 11:00 MYT (11 - 8 = 3)
@@ -38,25 +38,25 @@ export const CONTACTS: ContactPerson[] = [
     name: "Aida",
     role: "Kakak",
     phone: "013-5948682",
-    whatsappUrl: "https://wa.me/60135948682?text=Assalamualaikum%20Aida,%20saya%20ingin%20bertanya%20berkenaan%20Majlis%20Perkahwinan%20Aqim%20%26%20Asyiqim",
+    whatsappUrl: "https://wa.me/60135948682?text=Assalamualaikum%20Aida,%20saya%20ingin%20bertanya%20berkenaan%20Majlis%20Perkahwinan%20Akim%20%26%20Asyiqim",
   },
   {
     name: "Shima",
     role: "Kakak",
     phone: "019-5948398",
-    whatsappUrl: "https://wa.me/60195948398?text=Assalamualaikum%20Shima,%20saya%20ingin%20bertanya%20berkenaan%20Majlis%20Perkahwinan%20Aqim%20%26%20Asyiqim",
+    whatsappUrl: "https://wa.me/60195948398?text=Assalamualaikum%20Shima,%20saya%20ingin%20bertanya%20berkenaan%20Majlis%20Perkahwinan%20Akim%20%26%20Asyiqim",
   },
   {
     name: "Fikri",
     role: "Abang",
     phone: "013-2286797",
-    whatsappUrl: "https://wa.me/60132286797?text=Assalamualaikum%20Fikri,%20saya%20ingin%20bertanya%20berkenaan%20Majlis%20Perkahwinan%20Aqim%20%26%20Asyiqim",
+    whatsappUrl: "https://wa.me/60132286797?text=Assalamualaikum%20Fikri,%20saya%20ingin%20bertanya%20berkenaan%20Majlis%20Perkahwinan%20Akim%20%26%20Asyiqim",
   },
   {
     name: "Shamil",
     role: "Abang",
     phone: "019-2911169",
-    whatsappUrl: "https://wa.me/60192911169?text=Assalamualaikum%20Shamil,%20saya%20ingin%20bertanya%20berkenaan%20Majlis%20Perkahwinan%20Aqim%20%26%20Asyiqim",
+    whatsappUrl: "https://wa.me/60192911169?text=Assalamualaikum%20Shamil,%20saya%20ingin%20bertanya%20berkenaan%20Majlis%20Perkahwinan%20Akim%20%26%20Asyiqim",
   },
 ];
 
@@ -70,7 +70,7 @@ export const SCHEDULE: ScheduleEvent[] = [
   {
     time: "12:30 PM",
     title: "Ketibaan Pasangan Pengantin",
-    desc: "Arak-arakan pengantin diiringi kompang.",
+    desc: "Arakan pengantin.",
     iconName: "Heart",
   },
   {
@@ -81,7 +81,7 @@ export const SCHEDULE: ScheduleEvent[] = [
   },
   {
     time: "1:30 PM",
-    title: "Makan Adab & Sesi Fotografi",
+    title: "Makan Beradab & Sesi Fotografi",
     desc: "Jamuan meja beradab bersama keluarga & sesi bergambar kenangan.",
     iconName: "Camera",
   },
@@ -114,7 +114,7 @@ export const GALLERY_PHOTOS: PhotoItem[] = [
   {
     id: "p1",
     title: "Saat Memutuskan Harapan",
-    caption: "Aqim & Asyiqim di taman bunga pergunungan.",
+    caption: "Akim & Asyiqim di taman bunga pergunungan.",
     url: "/wedgallery1.png",
     category: "prewedding",
   },

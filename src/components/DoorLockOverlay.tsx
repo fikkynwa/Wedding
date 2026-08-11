@@ -286,7 +286,7 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
                 {currentTexts.groomBride}
               </span>
               <span className="text-xs font-serif-title text-white italic font-light">
-                Aqim &amp; Asyiqim
+                {WEDDING_DETAILS.groomNameShort} &amp; {WEDDING_DETAILS.brideNameShort}
               </span>
             </div>
 
@@ -368,7 +368,7 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
                   {currentTexts.invitationLabel}
                 </p>
                 <h1 className="font-serif-title text-2xl text-white font-normal mt-0.5">
-                  Aqim &amp; Asyiqim
+                  {WEDDING_DETAILS.groomNameShort} &amp; {WEDDING_DETAILS.brideNameShort}
                 </h1>
               </div>
 
