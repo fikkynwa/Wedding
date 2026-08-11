@@ -11,6 +11,7 @@ interface GuestbookAndAiWishProps {
 
 export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentLang = 'ms' }) => {
   const [wishesList, setWishesList] = useState<Wish[]>([]);
+  const [likedAnimIds, setLikedAnimIds] = useState<Record<string, boolean>>({});
   const [name, setName] = useState('');
   const [relation, setRelation] = useState('Sahabat');
   const [message, setMessage] = useState('');
@@ -20,6 +21,10 @@ export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentL
   const [isGeneratingAi, setIsGeneratingAi] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedSuccess, setSubmittedSuccess] = useState(false);
+
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [deletePasswordInput, setDeletePasswordInput] = useState('');
+  const [deleteError, setDeleteError] = useState('');
 
   const isEn = currentLang === 'en';
 
@@ -236,6 +241,11 @@ export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentL
 
   // Like a wish
   const handleLike = async (id: string) => {
+    setLikedAnimIds((prev) => ({ ...prev, [id]: true }));
+    setTimeout(() => {
+      setLikedAnimIds((prev) => ({ ...prev, [id]: false }));
+    }, 600);
+
     setWishesList((prev) =>
       prev.map((w) => (w.id === id ? { ...w, likes: w.likes + 1 } : w))
     );
@@ -250,6 +260,44 @@ export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentL
       await fetch(`/api/wishes/${id}/like`, { method: 'POST' });
     } catch (err) {
       console.error('Like wish error:', err);
+    }
+  };
+
+  // Delete wish confirmation
+  const handleDeleteWish = (id: string) => {
+    setDeleteTargetId(id);
+    setDeletePasswordInput('');
+    setDeleteError('');
+  };
+
+  const confirmDeleteWish = async () => {
+    if (deletePasswordInput.trim().toUpperCase() !== 'FIKKY') {
+      setDeleteError(isEn ? 'Incorrect password!' : 'Kata laluan salah!');
+      return;
+    }
+    const id = deleteTargetId;
+    if (!id) return;
+
+    try {
+      setWishesList((prev) => prev.filter((w) => w.id !== id));
+      const localSaved: Wish[] = JSON.parse(localStorage.getItem('user_wishes') || '[]');
+      const filteredLocal = localSaved.filter((w) => w.id !== id);
+      localStorage.setItem('user_wishes', JSON.stringify(filteredLocal));
+
+      try {
+        await fetch(`/api/wishes/${id}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: 'FIKKY' })
+        });
+      } catch (err) {
+        // ignore
+      }
+      setDeleteTargetId(null);
+      setDeletePasswordInput('');
+      setDeleteError('');
+    } catch (err) {
+      console.error('Delete wish error:', err);
     }
   };
 
@@ -469,13 +517,27 @@ export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentL
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => handleLike(item.id)}
-                    className="flex items-center gap-1 text-[10px] text-[#3B2314] font-semibold px-2 py-0.5 bg-white border border-[#E2D4C3] rounded-full transition-all hover:bg-[#F4ECE1]"
-                  >
-                    <Heart className="w-3 h-3 text-[#C5A059] fill-[#C5A059]" />
-                    <span>{item.likes}</span>
-                  </button>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => handleLike(item.id)}
+                      className={`flex items-center gap-1 text-[10px] font-semibold px-2.5 py-1 rounded-full border transition-all ${
+                        likedAnimIds[item.id]
+                          ? 'bg-[#C5A059] text-white border-[#C5A059] scale-125 shadow-md'
+                          : 'bg-white text-[#3B2314] border-[#E2D4C3] hover:bg-[#F4ECE1]'
+                      }`}
+                    >
+                      <Heart className={`w-3.5 h-3.5 text-[#C5A059] fill-[#C5A059] ${likedAnimIds[item.id] ? 'animate-bounce' : ''}`} />
+                      <span>{item.likes}</span>
+                    </button>
+
+                    <button
+                      onClick={() => handleDeleteWish(item.id)}
+                      className="p-1.5 rounded-full bg-white text-red-600 border border-red-200 hover:bg-red-50 transition-colors"
+                      title={isEn ? 'Delete wish' : 'Padam ucapan'}
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
 
                 <p className="text-xs text-[#2C1A0E] leading-relaxed font-sans pl-2 border-l-2 border-[#C5A059]">
@@ -487,6 +549,56 @@ export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentL
         </div>
 
       </motion.div>
+
+      {/* Delete Confirmation Modal */}
+      {deleteTargetId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl border border-[#E2D4C3]"
+          >
+            <h3 className="font-serif-title text-base font-bold text-[#2C1A0E] mb-1">
+              {isEn ? 'Delete Wish' : 'Padam Ucapan'}
+            </h3>
+            <p className="text-xs text-[#7A6250] mb-3">
+              {isEn ? 'Enter password to confirm deletion:' : 'Masukkan kata laluan untuk pengesahan:'}
+            </p>
+            <input
+              type="password"
+              value={deletePasswordInput}
+              onChange={(e) => {
+                setDeletePasswordInput(e.target.value);
+                setDeleteError('');
+              }}
+              placeholder={isEn ? 'Password' : 'Kata laluan'}
+              className="w-full px-3.5 py-2 text-sm border border-[#E2D4C3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C5A059] mb-2"
+              autoFocus
+            />
+            {deleteError && (
+              <p className="text-[11px] text-red-600 font-medium mb-3">{deleteError}</p>
+            )}
+            <div className="flex items-center justify-end gap-2 mt-4">
+              <button
+                onClick={() => {
+                  setDeleteTargetId(null);
+                  setDeletePasswordInput('');
+                  setDeleteError('');
+                }}
+                className="px-4 py-2 text-xs font-semibold text-[#5C3A21] bg-[#F4ECE1] hover:bg-[#E2D4C3] rounded-xl transition-colors"
+              >
+                {isEn ? 'Cancel' : 'Batal'}
+              </button>
+              <button
+                onClick={confirmDeleteWish}
+                className="px-4 py-2 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors shadow-md"
+              >
+                {isEn ? 'Delete' : 'Padam'}
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </section>
   );
 };

@@ -55,7 +55,7 @@ export const InvitationDetails: React.FC<InvitationDetailsProps> = ({ translated
         {/* Host Name */}
         <div className="my-3 py-1">
           <p className="font-semibold text-sm text-[#2C1A0E] tracking-wide uppercase font-sans">
-            {WEDDING_DETAILS.hostName}
+            {isEn ? WEDDING_DETAILS.hostNameEn : WEDDING_DETAILS.hostName}
           </p>
         </div>
 
@@ -119,11 +119,11 @@ export const InvitationDetails: React.FC<InvitationDetailsProps> = ({ translated
               <span>{isEn ? 'Time & Schedule' : 'Masa & Ketibaan'}</span>
             </div>
             <p className="font-semibold text-sm text-[#2C1A0E] mt-1 leading-[20px]">
-              {WEDDING_DETAILS.timeRange}
+              {isEn ? WEDDING_DETAILS.timeRangeEn : WEDDING_DETAILS.timeRange}
             </p>
             <div className="mt-2 inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white text-xs text-[#2C1A0E] border border-[#E2D4C3]">
               <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
-              <span>{isEn ? 'Bridal Arrival:' : 'Ketibaan Pengantin:'} <strong>{WEDDING_DETAILS.arrivalGroom}</strong></span>
+              <span>{isEn ? 'Bridal Arrival:' : 'Ketibaan Pengantin:'} <strong>{isEn ? WEDDING_DETAILS.arrivalGroomEn : WEDDING_DETAILS.arrivalGroom}</strong></span>
             </div>
           </div>
 
@@ -144,10 +144,10 @@ export const InvitationDetails: React.FC<InvitationDetailsProps> = ({ translated
                   {item.time}
                 </span>
                 <h5 className="font-semibold text-sm sm:text-base text-[#2C1A0E] mt-1">
-                  {isEn ? (item.title === 'Jamuan Makan' ? 'Wedding Banquet' : item.title === 'Ketibaan Pengantin' ? 'Bridal Arrival' : item.title === 'Sesi Bergambar' ? 'Photo Session' : item.title === 'Majlis Bersurai' ? 'Conclusion' : item.title) : item.title}
+                  {isEn && item.titleEn ? item.titleEn : item.title}
                 </h5>
                 <p className="text-xs text-[#7A6250] leading-relaxed">
-                  {isEn ? (item.desc.includes('Jamuan') ? 'Guest arrival and feast service' : item.desc.includes('Ketibaan') ? 'Entrance of groom & bride with family' : item.desc.includes('Bersama') ? 'Group photos with honored guests & family' : item.desc.includes('Terima kasih') ? 'Thank you for your attendance and blessings' : item.desc) : item.desc}
+                  {isEn && item.descEn ? item.descEn : item.desc}
                 </p>
               </div>
             ))}

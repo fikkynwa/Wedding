@@ -35,17 +35,40 @@ export default function App() {
     doaContent: "Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan hati Adam & Hawa, Yusof & Zulaikha dan seperti Engkau satukan hati Muhammad S.A.W & Siti Khadijah. Satukanlah hati kedua mempelai ini dengan iman, kejayaan dan tawakal. Kurniakanlah mereka zuriat yang soleh dan solehah serta berikanlah ketenangan kepada mereka di dunia dan akhirat."
   });
 
-  // YouTube Background Music Controls
+  // YouTube & HTML5 Background Music Controls
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
   const startAmbientMusic = () => {
     setIsPlayingMusic(true);
+    if (audioRef.current) {
+      try {
+        audioRef.current.currentTime = 202; // start at 3:22
+        audioRef.current.play().catch((err) => console.log('HTML5 audio play blocked:', err));
+      } catch (err) {
+        // Ignore fallback
+      }
+    }
   };
 
   const stopAmbientMusic = () => {
     setIsPlayingMusic(false);
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
   };
 
   const toggleMusic = () => {
-    setIsPlayingMusic((prev) => !prev);
+    setIsPlayingMusic((prev) => {
+      const next = !prev;
+      if (audioRef.current) {
+        if (next) {
+          audioRef.current.play().catch(() => {});
+        } else {
+          audioRef.current.pause();
+        }
+      }
+      return next;
+    });
   };
 
   // Door Unlock Handler
@@ -234,7 +257,7 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
       {/* Mobile Phone Screen Container */}
       <div
         ref={scrollContainerRef}
-        className="w-full max-w-[430px] min-h-screen sm:min-h-[850px] sm:rounded-[32px] bg-[#FAF6F0] text-[#2C1A0E] relative font-sans selection:bg-[#C5A059] selection:text-white pb-24 shadow-2xl border border-[#E2D4C3] overflow-x-hidden"
+        className="w-full max-w-[430px] min-h-screen sm:min-h-[850px] sm:rounded-[32px] bg-[#FAF6F0] text-[#2C1A0E] relative font-sans selection:bg-[#C5A059] selection:text-white pb-24 shadow-2xl border border-[#E2D4C3] overflow-x-clip"
       >
         {/* Falling Snow and Flower Petal Floating Overlay */}
         <SnowFloralOverlay />
@@ -257,6 +280,14 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
           activeSection={activeSection}
           onNavigate={scrollToSection}
           isTranslating={isTranslating}
+        />
+
+        {/* Native Mobile HTML5 Audio Player */}
+        <audio
+          ref={audioRef}
+          src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-wedding-piano-115201.mp3"
+          loop
+          preload="auto"
         />
 
         {/* Hidden YouTube Background Audio Player */}
@@ -311,7 +342,7 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
           <LocationAndContact currentLang={currentLang} />
 
           {/* Doa Mempelai (Replica of Card 4) */}
-          <DoaMempelai translatedText={translatedContent.doaContent} />
+          <DoaMempelai translatedText={translatedContent.doaContent} currentLang={currentLang} />
 
           {/* Countdown Timer */}
           <CountdownTimer currentLang={currentLang} />

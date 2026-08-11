@@ -21,8 +21,31 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
   currentLang,
   onSelectLang,
 }) => {
+  const doorTexts = {
+    ms: {
+      invitationLabel: 'UNDANGAN PERKAHWINAN',
+      subtext: 'Walimatul Urus',
+      toLabel: "Kepada YBhg. Dato'/Datin/Tuan/Puan/Encik/Cik:",
+      openBtn: 'Buka Undangan',
+      openingBtn: 'Membuka Undangan...',
+      groomBride: 'MEMPELAI',
+      defaultGuest: 'Tetamu Kehormat',
+    },
+    en: {
+      invitationLabel: 'WEDDING INVITATION',
+      subtext: 'Wedding Celebration',
+      toLabel: 'Cordially Invited:',
+      openBtn: 'Open Invitation',
+      openingBtn: 'Opening Invitation...',
+      groomBride: 'THE BRIDE & GROOM',
+      defaultGuest: 'Honored Guest',
+    },
+  };
+
+  const currentTexts = doorTexts[currentLang] || doorTexts.ms;
+
   const [isOpening, setIsOpening] = useState(false);
-  const [recipientName, setRecipientName] = useState('Tetamu Kehormat');
+  const [recipientName, setRecipientName] = useState(currentTexts.defaultGuest);
 
   // Interactive Likes & Restu State
   const [likesCount, setLikesCount] = useState<number>(() => {
@@ -37,8 +60,10 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
     const toParam = urlParams.get('to') || urlParams.get('name');
     if (toParam) {
       setRecipientName(toParam);
+    } else {
+      setRecipientName(currentTexts.defaultGuest);
     }
-  }, []);
+  }, [currentLang]);
 
   // Sync likes across tabs, windows, and Firebase Firestore
   useEffect(() => {
@@ -157,27 +182,7 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
     }, 1100);
   };
 
-  // Multi-language text for initial screen
-  const doorTexts = {
-    ms: {
-      invitationLabel: 'UNDANGAN PERKAHWINAN',
-      subtext: 'Walimatul Urus',
-      toLabel: "Kepada YBhg. Dato'/Datin/Tuan/Puan/Encik/Cik:",
-      openBtn: 'Buka Undangan',
-      openingBtn: 'Membuka Undangan...',
-      groomBride: 'MEMPELAI',
-    },
-    en: {
-      invitationLabel: 'WEDDING INVITATION',
-      subtext: 'Wedding Celebration',
-      toLabel: 'Cordially Invited:',
-      openBtn: 'Open Invitation',
-      openingBtn: 'Opening Invitation...',
-      groomBride: 'THE BRIDE & GROOM',
-    },
-  };
 
-  const currentTexts = doorTexts[currentLang] || doorTexts.ms;
 
   return (
     <AnimatePresence>
@@ -242,7 +247,7 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
 
             <div className="pb-8 pl-2 relative z-10">
               <span className="text-[9px] text-[#CBBBAA] tracking-widest uppercase block">
-                {WEDDING_DETAILS.dateFull}
+                {currentLang === 'en' ? WEDDING_DETAILS.dateFullEn : WEDDING_DETAILS.dateFull}
               </span>
             </div>
           </motion.div>
@@ -387,7 +392,7 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
               {/* Date & Full Address Box */}
               <div className="bg-[#1A0E07]/90 rounded-xl p-3 border border-[#C5A059]/40 space-y-1.5 text-center">
                 <div className="flex items-center justify-center gap-1.5 text-[#C5A059] text-[11px] font-semibold tracking-wider uppercase font-serif-title">
-                  <span>{WEDDING_DETAILS.dateFull}</span>
+                  <span>{currentLang === 'en' ? WEDDING_DETAILS.dateFullEn : WEDDING_DETAILS.dateFull}</span>
                 </div>
                 <div className="w-10 h-px bg-[#C5A059]/30 mx-auto"></div>
                 <p className="text-[11px] text-[#E8D09E] leading-snug font-sans px-1 font-medium">

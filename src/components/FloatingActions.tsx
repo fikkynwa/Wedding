@@ -29,7 +29,7 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({
           <div className="w-7 h-7 rounded-full bg-[#2C1A0E] flex items-center justify-center border border-[#C5A059]/40">
             <Phone className="w-3.5 h-3.5 text-[#C5A059]" />
           </div>
-          <span>{isEn ? 'Contact' : 'Kontak'}</span>
+          <span>{isEn ? 'Contact' : 'Hubungi'}</span>
         </button>
 
         {/* Location */}

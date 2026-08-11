@@ -45,7 +45,9 @@ export interface GiftAccount {
 export interface ScheduleEvent {
   time: string;
   title: string;
+  titleEn?: string;
   desc: string;
+  descEn?: string;
   iconName: string;
 }
 

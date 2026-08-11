@@ -2,12 +2,15 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Sparkles } from 'lucide-react';
 import { DOA_TEXT } from '../data';
+import { LanguageCode } from '../types';
 
 interface DoaMempelaiProps {
   translatedText?: string;
+  currentLang?: LanguageCode;
 }
 
-export const DoaMempelai: React.FC<DoaMempelaiProps> = ({ translatedText }) => {
+export const DoaMempelai: React.FC<DoaMempelaiProps> = ({ translatedText, currentLang = 'ms' }) => {
+  const isEn = currentLang === 'en';
   return (
     <section className="py-8 px-4 max-w-2xl mx-auto">
       
@@ -63,7 +66,7 @@ export const DoaMempelai: React.FC<DoaMempelaiProps> = ({ translatedText }) => {
 
         {/* Closing Invitation Message */}
         <p className="text-xs text-[#2C1A0E] font-medium leading-relaxed max-w-md mx-auto pt-4 border-t border-[#E2D4C3]">
-          {DOA_TEXT.closing}
+          {isEn ? DOA_TEXT.closingEn : DOA_TEXT.closing}
         </p>
 
         {/* Decorative Accent */}
