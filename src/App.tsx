@@ -265,7 +265,7 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
           <iframe
             width="1"
             height="1"
-            src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_BACKGROUND_MUSIC.videoId}?autoplay=1&start=11&enablejsapi=1&loop=1&playlist=${YOUTUBE_BACKGROUND_MUSIC.videoId}`}
+            src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_BACKGROUND_MUSIC.videoId}?autoplay=1&start=4&enablejsapi=1&loop=1&playlist=${YOUTUBE_BACKGROUND_MUSIC.videoId}`}
             title="YouTube Background Music Player"
             allow="autoplay"
             className="fixed -top-96 -left-96 opacity-0 pointer-events-none w-1 h-1 z-0"
