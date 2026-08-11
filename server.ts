@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
@@ -10,6 +11,10 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json());
+
+// File persistence paths
+const WISHES_FILE = path.join(process.cwd(), "wishes_data.json");
+const RSVPS_FILE = path.join(process.cwd(), "rsvps_data.json");
 
 // Initialize Gemini client lazily
 let aiClient: GoogleGenAI | null = null;
@@ -31,7 +36,7 @@ function getAIClient() {
   return aiClient;
 }
 
-// In-memory data store for RSVPs and Wishes
+// In-memory data store with file persistence for RSVPs and Wishes
 interface RSVP {
   id: string;
   name: string;
@@ -51,10 +56,48 @@ interface Wish {
   likes: number;
 }
 
-const rsvps: RSVP[] = [];
+function loadWishes(): Wish[] {
+  try {
+    if (fs.existsSync(WISHES_FILE)) {
+      const content = fs.readFileSync(WISHES_FILE, "utf-8");
+      return JSON.parse(content);
+    }
+  } catch (err) {
+    console.error("Error loading wishes_data.json:", err);
+  }
+  return [];
+}
 
-// Empty initial wishes array per user request (no pre-existing wishes)
-const wishes: Wish[] = [];
+function saveWishes(data: Wish[]) {
+  try {
+    fs.writeFileSync(WISHES_FILE, JSON.stringify(data, null, 2), "utf-8");
+  } catch (err) {
+    console.error("Error saving wishes_data.json:", err);
+  }
+}
+
+function loadRsvps(): RSVP[] {
+  try {
+    if (fs.existsSync(RSVPS_FILE)) {
+      const content = fs.readFileSync(RSVPS_FILE, "utf-8");
+      return JSON.parse(content);
+    }
+  } catch (err) {
+    console.error("Error loading rsvps_data.json:", err);
+  }
+  return [];
+}
+
+function saveRsvps(data: RSVP[]) {
+  try {
+    fs.writeFileSync(RSVPS_FILE, JSON.stringify(data, null, 2), "utf-8");
+  } catch (err) {
+    console.error("Error saving rsvps_data.json:", err);
+  }
+}
+
+const rsvps: RSVP[] = loadRsvps();
+const wishes: Wish[] = loadWishes();
 
 // --- API ROUTES ---
 
@@ -84,17 +127,20 @@ app.post("/api/rsvps", (req, res) => {
   };
 
   rsvps.unshift(newRsvp);
+  saveRsvps(rsvps);
 
   // If there's a wish attached, add to wishes feed too
   if (wishText && wishText.trim().length > 0) {
-    wishes.unshift({
+    const newWishObj = {
       id: "w-" + Date.now(),
       name,
       relation: "Tetamu Jemputan",
       message: wishText.trim(),
       createdAt: new Date().toISOString(),
       likes: 1,
-    });
+    };
+    wishes.unshift(newWishObj);
+    saveWishes(wishes);
   }
 
   res.json({ success: true, rsvp: newRsvp });
@@ -117,10 +163,11 @@ app.post("/api/wishes", (req, res) => {
     relation: relation || "Tetamu",
     message,
     createdAt: new Date().toISOString(),
-    likes: 0,
+    likes: 1,
   };
 
   wishes.unshift(newWish);
+  saveWishes(wishes);
   res.json({ success: true, wish: newWish });
 });
 
@@ -129,6 +176,7 @@ app.post("/api/wishes/:id/like", (req, res) => {
   const wish = wishes.find((w) => w.id === id);
   if (wish) {
     wish.likes += 1;
+    saveWishes(wishes);
     return res.json({ success: true, likes: wish.likes });
   }
   res.status(404).json({ error: "Ucapan tidak dijumpai" });

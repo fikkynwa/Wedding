@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Mail, Heart, Globe } from 'lucide-react';
+import { doc, onSnapshot, setDoc, increment } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 import { WEDDING_DETAILS } from '../data';
 import { LanguageCode } from '../types';
 
@@ -38,8 +40,32 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
     }
   }, []);
 
-  // Sync likes across tabs & windows
+  // Sync likes across tabs, windows, and Firebase Firestore
   useEffect(() => {
+    // 1. Firebase Firestore real-time subscription
+    let unsubscribe = () => {};
+    try {
+      const statsRef = doc(db, 'stats', 'door_likes');
+      unsubscribe = onSnapshot(
+        statsRef,
+        (snapshot) => {
+          if (snapshot.exists()) {
+            const data = snapshot.data();
+            if (typeof data.count === 'number') {
+              setLikesCount((prev) => Math.max(prev, data.count));
+              localStorage.setItem('wedding_likes_count', String(data.count));
+            }
+          }
+        },
+        (err) => {
+          console.error('Door likes snapshot error:', err);
+        }
+      );
+    } catch (e) {
+      console.error('Firebase snapshot setup failed:', e);
+    }
+
+    // 2. Local storage event listener
     const handleStorage = (e: StorageEvent) => {
       if (e.key === 'wedding_likes_count' && e.newValue) {
         setLikesCount(parseInt(e.newValue, 10));
@@ -58,6 +84,7 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
     }
 
     return () => {
+      unsubscribe();
       window.removeEventListener('storage', handleStorage);
       if (channel) channel.close();
     };
@@ -81,6 +108,16 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
       }
       return newCount;
     });
+
+    // Write / increment in Firebase Firestore
+    try {
+      const statsRef = doc(db, 'stats', 'door_likes');
+      setDoc(statsRef, { count: increment(1) }, { merge: true }).catch((err) => {
+        console.error('Failed to increment door likes in Firestore:', err);
+      });
+    } catch (err) {
+      console.error('Firestore setDoc error:', err);
+    }
 
     // Spawn floating particle animation
     const id = Date.now() + Math.random();

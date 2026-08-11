@@ -23,6 +23,32 @@ export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentL
 
   const isEn = currentLang === 'en';
 
+  // Merge remote and local wishes to prevent loss
+  const mergeAndSetWishes = (remoteWishes: Wish[]) => {
+    try {
+      const localSaved: Wish[] = JSON.parse(localStorage.getItem('user_wishes') || '[]');
+      const combined = [...remoteWishes, ...localSaved];
+      
+      const map = new Map<string, Wish>();
+      combined.forEach((w) => {
+        const contentKey = `${(w.name || '').trim().toLowerCase()}::${(w.message || '').trim().toLowerCase()}`;
+        if (!map.has(w.id) && !map.has(contentKey)) {
+          map.set(w.id, w);
+          map.set(contentKey, w);
+        }
+      });
+
+      const uniqueWishes = Array.from(new Set(map.values())).sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
+      setWishesList(uniqueWishes);
+    } catch (err) {
+      console.error('Error merging wishes:', err);
+      setWishesList(remoteWishes);
+    }
+  };
+
   // Subscribe to Firebase Firestore wishes collection
   useEffect(() => {
     let unsubscribe: () => void = () => {};
@@ -45,9 +71,8 @@ export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentL
           });
 
           if (firestoreWishes.length > 0) {
-            setWishesList(firestoreWishes);
+            mergeAndSetWishes(firestoreWishes);
           } else {
-            // Fallback to fetch from /api/wishes or localStorage
             fetchWishes();
           }
         },
@@ -71,10 +96,7 @@ export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentL
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data.wishes)) {
-          const localSaved = JSON.parse(localStorage.getItem('user_wishes') || '[]');
-          const merged = [...data.wishes, ...localSaved];
-          const unique = Array.from(new Map(merged.map((w) => [w.id, w])).values());
-          setWishesList(unique);
+          mergeAndSetWishes(data.wishes);
           return;
         }
       }
@@ -175,6 +197,16 @@ export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentL
       createdAt: new Date().toISOString(),
       likes: 1,
     };
+    
+    // Save to local storage right away
+    try {
+      const existingLocal: Wish[] = JSON.parse(localStorage.getItem('user_wishes') || '[]');
+      const updatedLocal = [tempWishObj, ...existingLocal.filter((w) => w.id !== tempWishObj.id)];
+      localStorage.setItem('user_wishes', JSON.stringify(updatedLocal));
+    } catch (e) {
+      console.error('Failed saving wish to localStorage:', e);
+    }
+
     setWishesList((prev) => [tempWishObj, ...prev]);
 
     setMessage('');
@@ -182,21 +214,21 @@ export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentL
     setTimeout(() => setSubmittedSuccess(false), 4000);
 
     try {
-      // Save directly to Firebase Firestore
-      await addDoc(collection(db, 'wishes'), wishData);
-
-      // Also backup to API
+      // Backup to API backend (persisted to wishes_data.json)
       await fetch('/api/wishes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: cleanName,
-          relation,
+          relation: relation || (isEn ? 'Guest' : 'Tetamu'),
           message: cleanMsg,
         }),
       });
+
+      // Save to Firebase Firestore if online
+      await addDoc(collection(db, 'wishes'), wishData);
     } catch (err) {
-      console.error('Submit wish Firestore error:', err);
+      console.error('Submit wish backend/Firestore error:', err);
     } finally {
       setIsSubmitting(false);
     }
