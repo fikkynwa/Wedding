@@ -68,10 +68,10 @@ export default function App() {
     let animationFrameId: number;
     let isGracePeriod = true;
 
-    // Grace period timer so initial button click does not immediately cancel auto-scroll
+    // Grace period timer so initial door unlock touch does not immediately cancel auto-scroll
     const graceTimer = setTimeout(() => {
       isGracePeriod = false;
-    }, 400);
+    }, 1500);
 
     const stopAutoScrollOnUserInteraction = (e: Event) => {
       if (isGracePeriod) return;
@@ -92,23 +92,20 @@ export default function App() {
       const delta = Math.min((time - lastTime) / 1000, 0.1);
       lastTime = time;
 
-      // Gentle smooth scroll rate ~45px per second
-      const distance = 45 * delta;
+      // Smooth scroll rate ~50px per second
+      const distance = 50 * delta;
 
-      if (scrollContainerRef.current) {
+      window.scrollBy(0, distance);
+
+      if (scrollContainerRef.current && scrollContainerRef.current.scrollHeight > scrollContainerRef.current.clientHeight) {
         scrollContainerRef.current.scrollTop += distance;
       }
-      window.scrollBy({ top: distance, behavior: 'instant' });
 
       // Check if reached bottom
       const windowAtBottom =
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 25;
-      const containerAtBottom = scrollContainerRef.current
-        ? scrollContainerRef.current.scrollTop + scrollContainerRef.current.clientHeight >=
-          scrollContainerRef.current.scrollHeight - 25
-        : false;
+        window.innerHeight + window.scrollY >= Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - 30;
 
-      if (windowAtBottom || containerAtBottom) {
+      if (windowAtBottom) {
         setIsAutoScrolling(false);
       } else {
         animationFrameId = requestAnimationFrame(scrollLoop);
@@ -268,7 +265,7 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
           <iframe
             width="1"
             height="1"
-            src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_BACKGROUND_MUSIC.videoId}?autoplay=1&start=10&enablejsapi=1&loop=1&playlist=${YOUTUBE_BACKGROUND_MUSIC.videoId}`}
+            src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_BACKGROUND_MUSIC.videoId}?autoplay=1&start=11&enablejsapi=1&loop=1&playlist=${YOUTUBE_BACKGROUND_MUSIC.videoId}`}
             title="YouTube Background Music Player"
             allow="autoplay"
             className="fixed -top-96 -left-96 opacity-0 pointer-events-none w-1 h-1 z-0"

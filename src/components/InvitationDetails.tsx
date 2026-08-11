@@ -93,7 +93,7 @@ export const InvitationDetails: React.FC<InvitationDetailsProps> = ({ translated
               <MapPin className="w-3.5 h-3.5 text-[#C5A059]" />
               <span>{isEn ? 'Venue' : 'Bertempat Di'}</span>
             </div>
-            <p className="font-semibold text-xs sm:text-sm text-[#2C1A0E] mt-0.5 text-center leading-[19.25px]">
+            <p className="font-semibold text-xs sm:text-sm text-[#2C1A0E] mt-0.5 text-center leading-[20px]">
               {WEDDING_DETAILS.address}
             </p>
           </div>
@@ -104,7 +104,7 @@ export const InvitationDetails: React.FC<InvitationDetailsProps> = ({ translated
               <Calendar className="w-3.5 h-3.5 text-[#C5A059]" />
               <span>{isEn ? 'Event Date' : 'Tarikh Majlis'}</span>
             </div>
-            <p className="font-bold text-sm text-[#2C1A0E] mt-0.5 leading-[19.25px]">
+            <p className="font-bold text-sm text-[#2C1A0E] mt-0.5 leading-[20px]">
               3 {isEn ? 'October' : 'Oktober'} 2026 ({isEn ? 'Saturday' : WEDDING_DETAILS.dayName})
             </p>
             <p className="text-[11px] text-[#5C3A21] italic font-medium">
@@ -118,7 +118,7 @@ export const InvitationDetails: React.FC<InvitationDetailsProps> = ({ translated
               <Clock className="w-3.5 h-3.5 text-[#C5A059]" />
               <span>{isEn ? 'Time & Schedule' : 'Masa & Ketibaan'}</span>
             </div>
-            <p className="font-semibold text-sm text-[#2C1A0E] mt-1 leading-[19.25px]">
+            <p className="font-semibold text-sm text-[#2C1A0E] mt-1 leading-[20px]">
               {WEDDING_DETAILS.timeRange}
             </p>
             <div className="mt-2 inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white text-xs text-[#2C1A0E] border border-[#E2D4C3]">

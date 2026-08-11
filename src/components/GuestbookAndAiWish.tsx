@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MessageSquare, Sparkles, Send, Heart, User, CheckCircle2, RefreshCw } from 'lucide-react';
+import { MessageSquare, Sparkles, Send, Heart, User, CheckCircle2, RefreshCw, Trash2, RotateCcw } from 'lucide-react';
 import { Wish, LanguageCode } from '../types';
 import { db } from '../lib/firebase';
 import { collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, increment, serverTimestamp } from 'firebase/firestore';
@@ -354,12 +354,25 @@ export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentL
 
             {/* Message Textarea */}
             <div>
-              <label className="block text-[11px] text-[#2C1A0E] font-semibold mb-1">
-                {isEn ? 'Your Message / Prayer *' : 'Mesej / Doa Anda *'}
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-[11px] text-[#2C1A0E] font-semibold">
+                  {isEn ? 'Your Message / Prayer *' : 'Mesej / Doa Anda *'}
+                </label>
+                {message && (
+                  <button
+                    type="button"
+                    onClick={() => setMessage('')}
+                    className="text-[10px] text-red-700 hover:text-red-800 font-semibold flex items-center gap-1 bg-red-50 hover:bg-red-100 px-2 py-0.5 rounded-full border border-red-200 transition-colors shadow-xs"
+                    title={isEn ? 'Clear message' : 'Padam mesej'}
+                  >
+                    <Trash2 className="w-3 h-3 text-red-600" />
+                    <span>{isEn ? 'Clear Wish' : 'Padam Ucapan'}</span>
+                  </button>
+                )}
+              </div>
               <textarea
                 required
-                rows={2}
+                rows={3}
                 placeholder={isEn ? "Write your wish or click the AI button to generate..." : "Tuliskan doa atau gunakan butang AI..."}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}

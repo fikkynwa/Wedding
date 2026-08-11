@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 interface Particle {
   id: number;
@@ -11,16 +11,18 @@ interface Particle {
 }
 
 export const SnowFloralOverlay: React.FC = () => {
-  // Generate 24 random particles
-  const particles: Particle[] = Array.from({ length: 24 }).map((_, i) => ({
-    id: i,
-    left: Math.random() * 100,
-    size: Math.random() * 8 + 6, // 6px to 14px
-    duration: Math.random() * 8 + 7, // 7s to 15s
-    delay: Math.random() * 6, // 0s to 6s
-    opacity: Math.random() * 0.6 + 0.3,
-    type: i % 3 === 0 ? 'petal' : 'snow',
-  }));
+  // Generate 24 random particles once and memoize so re-renders don't reset animations
+  const particles = useMemo<Particle[]>(() => {
+    return Array.from({ length: 24 }).map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      size: Math.random() * 8 + 6, // 6px to 14px
+      duration: Math.random() * 8 + 7, // 7s to 15s
+      delay: Math.random() * 6, // 0s to 6s
+      opacity: Math.random() * 0.6 + 0.3,
+      type: i % 3 === 0 ? 'petal' : 'snow',
+    }));
+  }, []);
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[60] overflow-hidden">
