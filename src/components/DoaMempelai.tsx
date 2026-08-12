@@ -49,7 +49,7 @@ export const DoaMempelai: React.FC<DoaMempelaiProps> = ({ translatedText, curren
 
         {/* Title */}
         <h3 className="font-serif-title text-lg sm:text-xl text-[#2C1A0E] font-semibold mb-3">
-          {DOA_TEXT.title}
+          {isEn ? 'Prayer for the Bride and Groom' : DOA_TEXT.title}
         </h3>
 
         {/* Doa Body Text */}

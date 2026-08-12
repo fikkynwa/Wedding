@@ -95,11 +95,11 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({
           {/* Date Banner Section - Benchmark Font */}
           <div className="max-w-xs mx-auto py-3.5 px-6 bg-[#F4ECE1] border border-[#E2D4C3] rounded-2xl shadow-inner my-6">
             <p className="text-xs uppercase tracking-[0.25em] text-[#C5A059] font-serif-title font-bold mb-1.5">
-              {WEDDING_DETAILS.monthYear}
+              {isEn ? WEDDING_DETAILS.monthYearEn : WEDDING_DETAILS.monthYear}
             </p>
             <div className="flex items-center justify-center gap-4 py-1">
               <span className="text-sm font-serif-title font-bold tracking-widest text-[#5C3A21] uppercase">
-                {WEDDING_DETAILS.dayName}
+                {isEn ? WEDDING_DETAILS.dayNameEn : WEDDING_DETAILS.dayName}
               </span>
               <div className="h-6 w-px bg-[#C5A059]"></div>
               <span className="font-serif-title text-3xl sm:text-4xl font-bold text-[#2C1A0E] tracking-tight">

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MessageSquare, Sparkles, Send, Heart, User, CheckCircle2, RefreshCw, Trash2, RotateCcw } from 'lucide-react';
+import { MessageSquare, Sparkles, Send, Heart, User, CheckCircle2, RefreshCw, Trash2 } from 'lucide-react';
 import { Wish, LanguageCode } from '../types';
 import { db } from '../lib/firebase';
-import { collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, increment, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, increment, serverTimestamp, getDocs, writeBatch } from 'firebase/firestore';
 
 interface GuestbookAndAiWishProps {
   currentLang?: LanguageCode;
@@ -499,10 +499,12 @@ export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentL
 
         {/* Wishes Feed */}
         <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
-          <h3 className="font-serif-title text-sm font-bold text-[#2C1A0E] mb-2 flex items-center gap-2">
-            <Heart className="w-3.5 h-3.5 text-[#C5A059] fill-[#C5A059]" />
-            {isEn ? `Guest Messages (${wishesList.length})` : `Titipan Doa Tetamu (${wishesList.length})`}
-          </h3>
+          <div className="mb-2">
+            <h3 className="font-serif-title text-sm font-bold text-[#2C1A0E] flex items-center gap-2">
+              <Heart className="w-3.5 h-3.5 text-[#C5A059] fill-[#C5A059]" />
+              {isEn ? `Guest Messages (${wishesList.length})` : `Titipan Doa Tetamu (${wishesList.length})`}
+            </h3>
+          </div>
 
           {wishesList.length === 0 ? (
             <p className="text-xs text-center text-[#5C3A21] font-medium py-6 italic border border-dashed border-[#E2D4C3] rounded-2xl bg-[#FAF6F0]">
@@ -611,6 +613,7 @@ export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentL
           </motion.div>
         </div>
       )}
+
     </section>
   );
 };

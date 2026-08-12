@@ -50,7 +50,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({
               {WEDDING_DETAILS.groomNameShort} &amp; {WEDDING_DETAILS.brideNameShort}
             </span>
             <span className="text-[9px] tracking-[0.2em] text-[#C5A059] uppercase font-sans">
-              03 Oktober 2026
+              03 {currentLang === 'en' ? 'October' : 'Oktober'} 2026
             </span>
           </div>
         </button>

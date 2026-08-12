@@ -182,6 +182,18 @@ app.post("/api/wishes/:id/like", (req, res) => {
   res.status(404).json({ error: "Ucapan tidak dijumpai" });
 });
 
+app.post("/api/wishes/reset-likes", (req, res) => {
+  const { password } = req.body;
+  if (!password || password.trim().toUpperCase() !== 'FIKKY') {
+    return res.status(403).json({ error: "Kata laluan salah" });
+  }
+  wishes.forEach((w) => {
+    w.likes = 0;
+  });
+  saveWishes(wishes);
+  res.json({ success: true, wishes });
+});
+
 // AI Translation Endpoint
 app.post("/api/translate", async (req, res) => {
   try {

@@ -25,7 +25,7 @@ export const WEDDING_DETAILS = {
   address: "No. 300 Jalan Timur, Felda Trolak Selatan, 35600 Sungkai, Perak",
   locationName: "Felda Trolak Selatan",
   googleMapsUrl: "https://maps.app.goo.gl/PWVfTFKZyGcMmJuM9",
-  wazeUrl: "https://www.waze.com/ul?q=Felda+Trolak+Selatan+Sungkai+Perak&navigate=yes",
+  wazeUrl: "https://www.waze.com/ul?ll=3.8856,101.3915&q=Felda+Trolak+Selatan+Sungkai+Perak&navigate=yes",
   calendarEvent: {
     title: "Majlis Perkahwinan Akim & Asyiqim",
     details: "Walimatul Urus Muhammad Hakim & Najma Asyiqim di Felda Trolak Selatan, Sungkai, Perak.",
