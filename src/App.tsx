@@ -302,10 +302,10 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
             >
               <span className="flex items-center gap-1.5 font-medium text-white">
                 <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
-                Auto-Skrol Aktif
+                {isEn ? 'Auto-Scroll Active' : 'Auto-Skrol Aktif'}
               </span>
               <span className="text-[10px] text-[#C5A059] font-normal">
-                Sentuh skrin untuk berhenti
+                {isEn ? 'Tap screen to stop' : 'Sentuh skrin untuk berhenti'}
               </span>
             </motion.div>
           )}
