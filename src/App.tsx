@@ -12,7 +12,7 @@ import { FloatingActions } from './components/FloatingActions';
 import { DoorLockOverlay } from './components/DoorLockOverlay';
 import { SnowFloralOverlay } from './components/SnowFloralOverlay';
 import { LanguageCode } from './types';
-import { YOUTUBE_BACKGROUND_MUSIC, WEDDING_DETAILS } from './data';
+import { WEDDING_DETAILS } from './data';
 import { Heart, Sparkles, Music, Pause } from 'lucide-react';
 
 export default function App() {
@@ -290,18 +290,6 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
           loop
           preload="auto"
         />
-
-        {/* Hidden YouTube Background Audio Player */}
-        {isPlayingMusic && (
-          <iframe
-            width="1"
-            height="1"
-            src={`https://www.youtube-nocookie.com/embed/${YOUTUBE_BACKGROUND_MUSIC.videoId}?autoplay=1&start=202&enablejsapi=1&loop=1&playlist=${YOUTUBE_BACKGROUND_MUSIC.videoId}`}
-            title="YouTube Background Music Player"
-            allow="autoplay"
-            className="fixed -top-96 -left-96 opacity-0 pointer-events-none w-1 h-1 z-0"
-          />
-        )}
 
         {/* Active Auto-Scroll Banner Notification */}
         <AnimatePresence>
