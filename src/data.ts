@@ -35,12 +35,6 @@ export const WEDDING_DETAILS = {
   }
 };
 
-export const YOUTUBE_BACKGROUND_MUSIC = {
-  url: "https://www.youtube.com/watch?v=MTOM2ooYGCQ&list=RDMTOM2ooYGCQ&start_radio=1",
-  videoId: "MTOM2ooYGCQ",
-  title: "Lagu Latar Perkahwinan (YouTube Instrumental)",
-};
-
 export const CONTACTS: ContactPerson[] = [
   {
     name: "Aida",
