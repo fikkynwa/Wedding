@@ -112,7 +112,7 @@ export const LocationAndContact: React.FC<LocationAndContactProps> = ({ currentL
                     {person.name}
                   </span>
                   <span className="text-[10px] px-2 py-0.5 bg-[#3B2314] text-[#C5A059] font-bold rounded-full">
-                    {person.role}
+                    {isEn ? (person.roleEn || person.role) : person.role}
                   </span>
                 </div>
                 <p className="text-[11px] text-[#7A6250] font-mono mt-0.5 font-medium">

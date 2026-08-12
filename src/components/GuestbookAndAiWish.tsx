@@ -395,41 +395,53 @@ export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentL
             </div>
 
             {/* AI Generator Helper Bar */}
-            <div className="p-2.5 bg-white rounded-xl border border-[#E2D4C3] flex flex-wrap items-center justify-between gap-2">
-              <div className="flex items-center gap-1.5">
-                <span className="text-[11px] text-[#5C3A21] font-semibold">
-                  {isEn ? 'Wish Style:' : 'Gaya Ucapan:'}
-                </span>
-                <select
-                  value={tone}
-                  onChange={(e) => setTone(e.target.value)}
-                  className="px-2 py-0.5 bg-[#F4ECE1] border border-[#E2D4C3] rounded text-xs text-[#2C1A0E]"
-                >
-                  <option value="Mesra & Hangat">{isEn ? 'Warm & Friendly' : 'Mesra & Hangat'}</option>
-                  <option value="Poetik & Berkat">{isEn ? 'Poetic & Blessed' : 'Poetik & Berkat'}</option>
-                  <option value="Islamik & Syahdu">{isEn ? 'Islamic & Prayerful' : 'Islamik & Syahdu'}</option>
-                  <option value="Santai & Ceria">{isEn ? 'Casual & Cheerful' : 'Santai & Ceria'}</option>
-                </select>
-              </div>
+            <div className="space-y-2">
+              {!name.trim() && (
+                <div className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl font-medium flex items-center gap-1.5">
+                  <span>⚠️</span>
+                  <span>
+                    {isEn 
+                      ? 'Please fill in your name above before generating an AI wish.' 
+                      : 'Sila isi nama anda di atas terlebih dahulu sebelum menjana ucapan AI.'}
+                  </span>
+                </div>
+              )}
+              <div className="p-2.5 bg-white rounded-xl border border-[#E2D4C3] flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[11px] text-[#5C3A21] font-semibold">
+                    {isEn ? 'Wish Style:' : 'Gaya Ucapan:'}
+                  </span>
+                  <select
+                    value={tone}
+                    onChange={(e) => setTone(e.target.value)}
+                    className="px-2 py-0.5 bg-[#F4ECE1] border border-[#E2D4C3] rounded text-xs text-[#2C1A0E]"
+                  >
+                    <option value="Mesra & Hangat">{isEn ? 'Warm & Friendly' : 'Mesra & Hangat'}</option>
+                    <option value="Poetik & Berkat">{isEn ? 'Poetic & Blessed' : 'Poetik & Berkat'}</option>
+                    <option value="Islamik & Syahdu">{isEn ? 'Islamic & Prayerful' : 'Islamik & Syahdu'}</option>
+                    <option value="Santai & Ceria">{isEn ? 'Casual & Cheerful' : 'Santai & Ceria'}</option>
+                  </select>
+                </div>
 
-              <button
-                type="button"
-                onClick={handleGenerateAiWish}
-                disabled={isGeneratingAi}
-                className="px-3 py-1 bg-[#3B2314] hover:bg-[#2C1A0E] text-white text-[11px] font-bold rounded-md flex items-center gap-1 shadow-xs transition-all disabled:opacity-50 border border-[#C5A059]/40"
-              >
-                {isGeneratingAi ? (
-                  <>
-                    <RefreshCw className="w-3 h-3 animate-spin text-[#C5A059]" />
-                    {isEn ? 'Generating...' : 'Menjana...'}
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-3 h-3 text-[#C5A059]" />
-                    {isEn ? 'Generate Wish with AI' : 'Jana Ucapan dengan AI'}
-                  </>
-                )}
-              </button>
+                <button
+                  type="button"
+                  onClick={handleGenerateAiWish}
+                  disabled={isGeneratingAi}
+                  className="px-3 py-1 bg-[#3B2314] hover:bg-[#2C1A0E] text-white text-[11px] font-bold rounded-md flex items-center gap-1 shadow-xs transition-all disabled:opacity-50 border border-[#C5A059]/40"
+                >
+                  {isGeneratingAi ? (
+                    <>
+                      <RefreshCw className="w-3 h-3 animate-spin text-[#C5A059]" />
+                      {isEn ? 'Generating...' : 'Menjana...'}
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-3 h-3 text-[#C5A059]" />
+                      {isEn ? 'Generate Wish with AI' : 'Jana Ucapan dengan AI'}
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Message Textarea */}

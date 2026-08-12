@@ -54,6 +54,7 @@ export interface ScheduleEvent {
 export interface ContactPerson {
   name: string;
   role: string;
+  roleEn?: string;
   phone: string;
   whatsappUrl: string;
 }

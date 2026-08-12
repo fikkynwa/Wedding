@@ -25,7 +25,7 @@ export const WEDDING_DETAILS = {
   address: "No. 300 Jalan Timur, Felda Trolak Selatan, 35600 Sungkai, Perak",
   locationName: "Felda Trolak Selatan",
   googleMapsUrl: "https://maps.app.goo.gl/PWVfTFKZyGcMmJuM9",
-  wazeUrl: "https://waze.com/ul?q=Felda+Trolak+Selatan+Sungkai+Perak",
+  wazeUrl: "https://www.waze.com/ul?q=Felda+Trolak+Selatan+Sungkai+Perak&navigate=yes",
   calendarEvent: {
     title: "Majlis Perkahwinan Akim & Asyiqim",
     details: "Walimatul Urus Muhammad Hakim & Najma Asyiqim di Felda Trolak Selatan, Sungkai, Perak.",
@@ -45,24 +45,28 @@ export const CONTACTS: ContactPerson[] = [
   {
     name: "Aida",
     role: "Kakak",
+    roleEn: "Sister",
     phone: "013-5948682",
     whatsappUrl: "https://wa.me/60135948682?text=Assalamualaikum%20Aida,%20saya%20ingin%20bertanya%20berkenaan%20Majlis%20Perkahwinan%20Akim%20%26%20Asyiqim",
   },
   {
     name: "Shima",
     role: "Kakak",
+    roleEn: "Sister",
     phone: "019-5948398",
     whatsappUrl: "https://wa.me/60195948398?text=Assalamualaikum%20Shima,%20saya%20ingin%20bertanya%20berkenaan%20Majlis%20Perkahwinan%20Akim%20%26%20Asyiqim",
   },
   {
     name: "Fikri",
     role: "Abang",
+    roleEn: "Brother",
     phone: "013-2286797",
     whatsappUrl: "https://wa.me/60132286797?text=Assalamualaikum%20Fikri,%20saya%20ingin%20bertanya%20berkenaan%20Majlis%20Perkahwinan%20Akim%20%26%20Asyiqim",
   },
   {
     name: "Shamil",
     role: "Abang",
+    roleEn: "Brother",
     phone: "019-2911169",
     whatsappUrl: "https://wa.me/60192911169?text=Assalamualaikum%20Shamil,%20saya%20ingin%20bertanya%20berkenaan%20Majlis%20Perkahwinan%20Akim%20%26%20Asyiqim",
   },

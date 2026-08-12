@@ -17,6 +17,7 @@ import { Heart, Sparkles, Music, Pause } from 'lucide-react';
 
 export default function App() {
   const [currentLang, setCurrentLang] = useState<LanguageCode>('ms');
+  const isEn = currentLang === 'en';
   const [isPlayingMusic, setIsPlayingMusic] = useState(false);
   const [activeSection, setActiveSection] = useState('jemputan');
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -42,7 +43,7 @@ export default function App() {
     setIsPlayingMusic(true);
     if (audioRef.current) {
       try {
-        audioRef.current.currentTime = 202; // start at 3:22
+        audioRef.current.currentTime = 0;
         audioRef.current.play().catch((err) => console.log('HTML5 audio play blocked:', err));
       } catch (err) {
         // Ignore fallback
@@ -285,7 +286,7 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
         {/* Native Mobile HTML5 Audio Player */}
         <audio
           ref={audioRef}
-          src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-wedding-piano-115201.mp3"
+          src="/Ukays%20-%20Di%20Sana%20Menanti%20Di%20Sini%20Menunggu%20%5B%20Lagu%20Lirik%20%5D.mp3"
           loop
           preload="auto"
         />
@@ -364,14 +365,25 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
             </div>
 
             <p className="font-serif-title italic text-xs text-[#4A3525] leading-relaxed px-2">
-              "Bunga melur suntingan jelita,<br />
-              Disusun rapi di atas takhta,<br />
-              Dua hati menyatu cinta,<br />
-              Kekal bahagia hingga ke syurga."
+              {isEn ? (
+                <>
+                  "Two hearts unite in pure devotion,<br />
+                  A sacred bond of love and emotion,<br />
+                  May this blessed journey be so sweet,<br />
+                  With endless joy and grace complete."
+                </>
+              ) : (
+                <>
+                  "Bunga melur suntingan jelita,<br />
+                  Disusun rapi di atas takhta,<br />
+                  Dua hati menyatu cinta,<br />
+                  Kekal bahagia hingga ke syurga."
+                </>
+              )}
             </p>
 
             <p className="text-[11px] text-[#2C1A0E] tracking-widest uppercase font-semibold">
-              Walimatul Urus {WEDDING_DETAILS.groomNameShort} &amp; {WEDDING_DETAILS.brideNameShort} • 03 Oktober 2026
+              {isEn ? 'Wedding Reception' : 'Walimatul Urus'} {WEDDING_DETAILS.groomNameShort} &amp; {WEDDING_DETAILS.brideNameShort} • 03 {isEn ? 'October' : 'Oktober'} 2026
             </p>
             <p className="text-[10px] text-[#7A6250]">
               Teratak Kasih Felda Trolak Selatan, Sungkai, Perak
