@@ -323,7 +323,7 @@ export const GuestbookAndAiWish: React.FC<GuestbookAndAiWishProps> = ({ currentL
             <MessageSquare className="w-4 h-4" />
           </div>
           <h2 className="font-serif-title text-xl text-[#2C1A0E] uppercase tracking-wider font-bold">
-            {isEn ? 'Guestbook & AI Blessings' : 'Buku Ucapan & Doa Restu'}
+            {isEn ? 'Guestbook & Blessings' : 'Buku Ucapan & Doa Restu'}
           </h2>
           <p className="text-xs text-[#5C3A21] font-medium mt-0.5">
             {isEn ? 'Leave your heartfelt prayers and blessings for the bride and groom' : 'Coretkan doa dan titipan harapan mesra buat pengantin'}
