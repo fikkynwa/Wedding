@@ -39,11 +39,13 @@ export default function App() {
   // YouTube & HTML5 Background Music Controls
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const startAmbientMusic = () => {
+  const startAmbientMusic = (startTime = 57) => {
     setIsPlayingMusic(true);
     if (audioRef.current) {
       try {
-        audioRef.current.currentTime = 0;
+        if (audioRef.current.currentTime < 1 || isNaN(audioRef.current.currentTime)) {
+          audioRef.current.currentTime = startTime;
+        }
         audioRef.current.play().catch((err) => console.log('HTML5 audio play blocked:', err));
       } catch (err) {
         // Ignore fallback
@@ -63,6 +65,9 @@ export default function App() {
       const next = !prev;
       if (audioRef.current) {
         if (next) {
+          if (audioRef.current.currentTime < 1 || isNaN(audioRef.current.currentTime)) {
+            audioRef.current.currentTime = 57;
+          }
           audioRef.current.play().catch(() => {});
         } else {
           audioRef.current.pause();
@@ -289,6 +294,11 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
           src="/Recording.mp3"
           loop
           preload="auto"
+          onLoadedMetadata={() => {
+            if (audioRef.current && (audioRef.current.currentTime < 1 || isNaN(audioRef.current.currentTime))) {
+              audioRef.current.currentTime = 57;
+            }
+          }}
         />
 
         {/* Active Auto-Scroll Banner Notification */}
