@@ -166,11 +166,11 @@ export const DoorLockOverlay: React.FC<DoorLockOverlayProps> = ({
     };
   }, [isUnlocked]);
 
-  const handleUnlockClick = (e: React.MouseEvent) => {
+  const handleUnlockClick = (e: React.MouseEvent | React.TouchEvent) => {
     e.stopPropagation();
     if (isOpening || isUnlocked) return;
 
-    // 1. Immediately start audio in user gesture call stack
+    // 1. Immediately start audio in user gesture call stack without delay
     onStartMusic();
 
     // 2. Trigger door opening animation
