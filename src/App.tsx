@@ -43,12 +43,19 @@ export default function App() {
     setIsPlayingMusic(true);
     if (audioRef.current) {
       try {
-        if (audioRef.current.currentTime < 1 || isNaN(audioRef.current.currentTime)) {
+        if (Math.abs(audioRef.current.currentTime - startTime) > 2 && (audioRef.current.currentTime < 1 || isNaN(audioRef.current.currentTime))) {
           audioRef.current.currentTime = startTime;
         }
-        audioRef.current.play().catch((err) => console.log('HTML5 audio play blocked:', err));
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((err) => {
+            console.log('HTML5 audio play blocked or queued:', err);
+            // Retry immediate playback if seeking caused transient delay
+            audioRef.current?.play().catch(() => {});
+          });
+        }
       } catch (err) {
-        // Ignore fallback
+        console.error('Audio start error:', err);
       }
     }
   };
@@ -76,6 +83,30 @@ export default function App() {
       return next;
     });
   };
+
+  // Pre-cue audio position to 57s as soon as possible
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const setCue = () => {
+      if (audio.currentTime < 1 || isNaN(audio.currentTime)) {
+        try {
+          audio.currentTime = 57;
+        } catch (e) {
+          // ignore if not yet seekable
+        }
+      }
+    };
+
+    audio.addEventListener('loadedmetadata', setCue);
+    audio.addEventListener('canplay', setCue);
+
+    return () => {
+      audio.removeEventListener('loadedmetadata', setCue);
+      audio.removeEventListener('canplay', setCue);
+    };
+  }, []);
 
   // Door Unlock Handler
   const handleUnlockDoor = () => {
