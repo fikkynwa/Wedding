@@ -39,18 +39,14 @@ export default function App() {
   // YouTube & HTML5 Background Music Controls
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const startAmbientMusic = (startTime = 57) => {
+  const startAmbientMusic = () => {
     setIsPlayingMusic(true);
     if (audioRef.current) {
       try {
-        if (Math.abs(audioRef.current.currentTime - startTime) > 2 && (audioRef.current.currentTime < 1 || isNaN(audioRef.current.currentTime))) {
-          audioRef.current.currentTime = startTime;
-        }
         const playPromise = audioRef.current.play();
         if (playPromise !== undefined) {
           playPromise.catch((err) => {
             console.log('HTML5 audio play blocked or queued:', err);
-            // Retry immediate playback if seeking caused transient delay
             audioRef.current?.play().catch(() => {});
           });
         }
@@ -72,9 +68,6 @@ export default function App() {
       const next = !prev;
       if (audioRef.current) {
         if (next) {
-          if (audioRef.current.currentTime < 1 || isNaN(audioRef.current.currentTime)) {
-            audioRef.current.currentTime = 57;
-          }
           audioRef.current.play().catch(() => {});
         } else {
           audioRef.current.pause();
@@ -83,30 +76,6 @@ export default function App() {
       return next;
     });
   };
-
-  // Pre-cue audio position to 57s as soon as possible
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const setCue = () => {
-      if (audio.currentTime < 1 || isNaN(audio.currentTime)) {
-        try {
-          audio.currentTime = 57;
-        } catch (e) {
-          // ignore if not yet seekable
-        }
-      }
-    };
-
-    audio.addEventListener('loadedmetadata', setCue);
-    audio.addEventListener('canplay', setCue);
-
-    return () => {
-      audio.removeEventListener('loadedmetadata', setCue);
-      audio.removeEventListener('canplay', setCue);
-    };
-  }, []);
 
   // Door Unlock Handler
   const handleUnlockDoor = () => {
@@ -325,11 +294,6 @@ Prayer: Ya Allah, Satukanlah hati kedua mempelai ini seperti mana Engkau satukan
           src="/Recording.mp3"
           loop
           preload="auto"
-          onLoadedMetadata={() => {
-            if (audioRef.current && (audioRef.current.currentTime < 1 || isNaN(audioRef.current.currentTime))) {
-              audioRef.current.currentTime = 57;
-            }
-          }}
         />
 
         {/* Active Auto-Scroll Banner Notification */}
